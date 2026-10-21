@@ -93,22 +93,22 @@ function Header() {
     <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/80 shadow-lg backdrop-blur-xl" : "bg-transparent"}`}>
       <motion.div style={{ scaleX: x }} className="bg-gradient-brand absolute bottom-0 left-0 h-0.5 w-full origin-left" />
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#top" className={`rounded-lg px-2 py-1 transition ${scrolled ? "" : "bg-background/90"}`}>
+        <a href="#top" className={`rounded-lg px-2 py-1 transition `}>
           <img src={`${W}/2016/04/Formedics-logo-227-px.png`} alt="Formedics" className="h-9 w-auto" />
         </a>
         <nav className="hidden items-center gap-1 md:flex">
           {nav.map(([l, h]) => (
-            <a key={l} href={h} className={`group relative px-4 py-2 text-sm font-semibold transition ${scrolled ? "text-foreground" : "text-navy-foreground"}`}>
+            <a key={l} href={h} className={`group relative px-4 py-2 text-sm font-semibold transition text-foreground`}>
               {l}
               <span className="bg-gradient-brand absolute inset-x-4 bottom-1 h-0.5 origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           ))}
-          <span className={`ml-3 flex gap-1 rounded-full border px-1 py-1 text-xs font-bold ${scrolled ? "border-border" : "border-navy-foreground/30 text-navy-foreground"}`}>
+          <span className={`ml-3 flex gap-1 rounded-full border px-1 py-1 text-xs font-bold border-border`}>
             <a href="https://formedics.lt/lt/pagrindinis/" className="rounded-full px-3 py-1 hover:bg-teal/20">LT</a>
             <span className="bg-gradient-brand rounded-full px-3 py-1 text-primary-foreground">EN</span>
           </span>
         </nav>
-        <button aria-label="Menu" onClick={() => setOpen(!open)} className={`flex flex-col gap-1.5 md:hidden ${scrolled ? "text-foreground" : "text-navy-foreground"}`}>
+        <button aria-label="Menu" onClick={() => setOpen(!open)} className={`flex flex-col gap-1.5 md:hidden text-foreground`}>
           <motion.span animate={{ rotate: open ? 45 : 0, y: open ? 8 : 0 }} className="h-0.5 w-7 bg-current" />
           <motion.span animate={{ opacity: open ? 0 : 1 }} className="h-0.5 w-7 bg-current" />
           <motion.span animate={{ rotate: open ? -45 : 0, y: open ? -8 : 0 }} className="h-0.5 w-7 bg-current" />
@@ -132,35 +132,52 @@ function Header() {
 function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.25]);
-  const op = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const rot = useTransform(scrollYProgress, [0, 1], [0, 6]);
   const words = "Dedication towards your success!".split(" ");
+  const chips = ["Cardiology", "Radiology", "Endoscopy", "Orthopedics", "Urology", "Surgery"];
   return (
-    <section id="top" ref={ref} className="relative h-screen min-h-[640px] overflow-hidden bg-navy">
-      <motion.img src={hero} alt="" width={1920} height={1088} style={{ y, scale }} className="absolute inset-0 h-full w-full object-cover opacity-70" />
-      <div className="absolute inset-0 bg-gradient-to-b from-navy/40 via-navy/30 to-navy" />
-      <motion.div style={{ opacity: op }} className="relative mx-auto flex h-full max-w-7xl flex-col justify-center px-6">
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-teal">
-          Formedics · Lithuania · Latvia · Estonia
-        </motion.p>
-        <h1 className="font-display max-w-4xl text-5xl font-bold leading-[1.05] text-navy-foreground md:text-8xl">
-          {words.map((w, i) => (
-            <span key={i} className="inline-block overflow-hidden pb-2 align-bottom">
-              <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ delay: 0.3 + i * 0.12, duration: 0.9, ease: [0.22, 1, 0.36, 1] }} className={`mr-4 inline-block ${i === 3 ? "text-gradient" : ""}`}>
-                {w}
-              </motion.span>
-            </span>
-          ))}
-        </h1>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="mt-10 flex flex-wrap gap-4">
-          <a href="#products" className="bg-gradient-brand shadow-glow rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">Our products</a>
-          <a href="#about" className="rounded-full border border-navy-foreground/30 px-8 py-4 font-semibold text-navy-foreground backdrop-blur transition hover:bg-navy-foreground/10">About us</a>
+    <section id="top" ref={ref} className="relative overflow-hidden bg-background pt-32 pb-24 lg:min-h-screen lg:pt-40">
+      <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(color-mix(in_oklab,var(--primary)_14%,transparent)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
+      <div className="bg-gradient-brand pointer-events-none absolute -right-40 -top-40 h-[36rem] w-[36rem] rounded-full opacity-15 blur-3xl" />
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-6 lg:grid-cols-[1.1fr_1fr]">
+        <div>
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-6 inline-flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-teal" /> Medical devices · LT · LV · EE
+          </motion.p>
+          <h1 className="font-display text-5xl font-bold leading-[1.05] text-foreground md:text-7xl">
+            {words.map((w, i) => (
+              <span key={i} className="inline-block overflow-hidden pb-2 align-bottom">
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ delay: 0.3 + i * 0.12, duration: 0.9, ease: [0.22, 1, 0.36, 1] }} className={`mr-4 inline-block ${i >= 2 ? "text-gradient" : ""}`}>
+                  {w}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            More than 20 years supplying safe, high-quality, and effective medical products to the biggest health care institutions of the Baltic countries.
+          </motion.p>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="mt-10 flex flex-wrap gap-4">
+            <a href="#products" className="bg-gradient-brand shadow-glow rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">Our products</a>
+            <a href="#about" className="rounded-full border bg-card px-8 py-4 font-semibold text-foreground transition hover:border-primary hover:text-primary">About us</a>
+          </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="mt-12 flex flex-wrap gap-2">
+            {chips.map((c) => <span key={c} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">{c}</span>)}
+          </motion.div>
+        </div>
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
+          <motion.div style={{ y, rotate: rot }} className="overflow-hidden rounded-[2.5rem] border shadow-2xl">
+            <img src={hero} alt="Medical devices supplied by Formedics" width={1600} height={1600} className="aspect-square w-full object-cover" />
+          </motion.div>
+          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute -bottom-6 -left-6 rounded-2xl border bg-card p-5 shadow-xl">
+            <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
+            <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
+          </motion.div>
+          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute -right-4 top-8 rounded-2xl border bg-card px-5 py-3 shadow-xl">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
+          </motion.div>
         </motion.div>
-      </motion.div>
-      <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute bottom-8 left-1/2 flex h-12 w-7 -translate-x-1/2 justify-center rounded-full border-2 border-navy-foreground/40 pt-2">
-        <span className="h-2 w-1 rounded-full bg-teal" />
-      </motion.div>
+      </div>
     </section>
   );
 }
