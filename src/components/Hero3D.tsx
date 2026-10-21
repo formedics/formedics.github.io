@@ -12,6 +12,25 @@ const NAVY = "#16233f";
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
+/** Soft radial halo used to make the sealed cross read as glowing. */
+function useGlowTexture() {
+  return useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 128;
+    const ctx = c.getContext("2d");
+    if (!ctx) return null;
+    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, "rgba(150,255,248,0.95)");
+    g.addColorStop(0.3, "rgba(34,184,196,0.5)");
+    g.addColorStop(1, "rgba(34,184,196,0)");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 128, 128);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    return t;
+  }, []);
+}
+
 /** Holds the whole assembly: auto-spin + pointer drag with inertia + mouse parallax. */
 function Rig({ children }: { children: React.ReactNode }) {
   const group = useRef<THREE.Group>(null);
@@ -116,32 +135,33 @@ function Rig({ children }: { children: React.ReactNode }) {
   return <group ref={group}>{children}</group>;
 }
 
-/** Glass capsule with a glowing cross sealed inside. */
+/** Frosted capsule shell with a glowing medical cross sealed inside. */
 function Capsule() {
   const cross = useRef<THREE.Group>(null);
+  const glow = useGlowTexture();
 
   useFrame(({ clock }) => {
     if (!cross.current) return;
-    // gentle breathing so the sealed emblem feels alive without ever turning edge-on
-    const s = 1 + Math.sin(clock.getElapsedTime() * 1.6) * 0.06;
-    cross.current.scale.setScalar(s);
+    // gentle breathing so the sealed emblem feels alive
+    cross.current.scale.setScalar(1 + Math.sin(clock.getElapsedTime() * 1.6) * 0.06);
   });
 
   return (
     <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.7}>
       <group rotation-z={-0.5}>
+        {/* shell: translucent so the cross stays readable, clearcoat for the wet glass highlight */}
         <mesh castShadow>
-          <capsuleGeometry args={[0.62, 1.15, 12, 48]} />
+          <capsuleGeometry args={[0.62, 1.15, 16, 64]} />
           <meshPhysicalMaterial
-            transmission={1}
-            thickness={0.45}
-            roughness={0.05}
-            ior={1.35}
+            color="#c8f4f2"
+            transparent
+            opacity={0.34}
+            roughness={0.1}
+            metalness={0.05}
             clearcoat={1}
-            clearcoatRoughness={0.06}
-            attenuationColor={TEAL}
-            attenuationDistance={6}
-            color="#eefdfd"
+            clearcoatRoughness={0.08}
+            depthWrite={false}
+            envMapIntensity={1.5}
           />
         </mesh>
 
@@ -150,13 +170,24 @@ function Capsule() {
           <group ref={cross}>
             <mesh>
               <boxGeometry args={[0.26, 0.94, 0.26]} />
-              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={5} toneMapped={false} />
+              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.4} toneMapped={false} />
             </mesh>
             <mesh>
               <boxGeometry args={[0.94, 0.26, 0.26]} />
-              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={5} toneMapped={false} />
+              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.4} toneMapped={false} />
             </mesh>
-            <pointLight intensity={8} distance={3.5} color={TEAL} />
+            {glow && (
+              <sprite scale={[3.1, 3.1, 1]}>
+                <spriteMaterial
+                  map={glow}
+                  blending={THREE.AdditiveBlending}
+                  transparent
+                  depthWrite={false}
+                  opacity={0.85}
+                />
+              </sprite>
+            )}
+            <pointLight intensity={6} distance={3.5} color={TEAL} />
           </group>
         </Billboard>
 
@@ -169,7 +200,6 @@ function Capsule() {
     </Float>
   );
 }
-
 
 /** One tilted orbit ring carrying a country node. */
 function Orbit({ country }: { country: Baltic }) {
@@ -188,8 +218,8 @@ function Orbit({ country }: { country: Baltic }) {
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
       <mesh rotation-x={Math.PI / 2}>
-        <torusGeometry args={[country.radius, 0.009, 6, 160]} />
-        <meshBasicMaterial color={country.color} transparent opacity={0.4} />
+        <torusGeometry args={[country.radius, 0.012, 12, 220]} />
+        <meshBasicMaterial color={country.color} transparent opacity={0.45} depthWrite={false} />
       </mesh>
 
       <group ref={spinner}>
@@ -204,8 +234,8 @@ function Orbit({ country }: { country: Baltic }) {
             />
           </mesh>
           <mesh rotation-x={Math.PI / 2}>
-            <torusGeometry args={[0.19, 0.007, 6, 48]} />
-            <meshBasicMaterial color={country.color} transparent opacity={0.65} />
+            <torusGeometry args={[0.19, 0.009, 10, 64]} />
+            <meshBasicMaterial color={country.color} transparent opacity={0.7} depthWrite={false} />
           </mesh>
         </group>
       </group>
@@ -234,11 +264,11 @@ function Pulse() {
     <group rotation-x={-Math.PI / 2} position-y={-1.35}>
       <mesh ref={a}>
         <ringGeometry args={[0.98, 1, 96]} />
-        <meshBasicMaterial color={TEAL} transparent opacity={0.4} side={THREE.DoubleSide} />
+        <meshBasicMaterial color={TEAL} transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
       <mesh ref={b}>
         <ringGeometry args={[0.98, 1, 96]} />
-        <meshBasicMaterial color={BLUE} transparent opacity={0.4} side={THREE.DoubleSide} />
+        <meshBasicMaterial color={BLUE} transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
     </group>
   );
@@ -279,10 +309,10 @@ function Dust() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.6} />
       <directionalLight
         position={[5, 7, 6]}
-        intensity={1.35}
+        intensity={1.4}
         castShadow
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
@@ -302,10 +332,10 @@ function Scene() {
       <ContactShadows position={[0, -1.7, 0]} opacity={0.32} scale={11} blur={2.6} far={4} color={NAVY} />
 
       <Environment resolution={256}>
-        <Lightformer intensity={2.2} position={[0, 5, 0]} scale={[10, 10, 1]} rotation-x={Math.PI / 2} />
-        <Lightformer intensity={1.4} color="#bff4ef" position={[-6, 1, -1]} rotation-y={Math.PI / 2} scale={[14, 3, 1]} />
-        <Lightformer intensity={1.1} color="#c3d2ff" position={[6, -1, 1]} rotation-y={-Math.PI / 2} scale={[14, 3, 1]} />
-        <Lightformer intensity={0.8} color="#ffffff" position={[0, -4, 4]} scale={[12, 4, 1]} />
+        <Lightformer intensity={2.4} position={[0, 5, 0]} scale={[10, 10, 1]} rotation-x={Math.PI / 2} />
+        <Lightformer intensity={1.6} color="#bff4ef" position={[-6, 1, -1]} rotation-y={Math.PI / 2} scale={[14, 3, 1]} />
+        <Lightformer intensity={1.3} color="#c3d2ff" position={[6, -1, 1]} rotation-y={-Math.PI / 2} scale={[14, 3, 1]} />
+        <Lightformer intensity={1} color="#ffffff" position={[0, -4, 4]} scale={[12, 4, 1]} />
       </Environment>
     </>
   );
