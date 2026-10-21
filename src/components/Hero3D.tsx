@@ -1,32 +1,14 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Float, Html, Lightformer } from "@react-three/drei";
+import { ContactShadows, Environment, Float, Lightformer } from "@react-three/drei";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
+import { BALTICS, type Baltic } from "@/lib/baltics";
 
-/**
- * Brand palette mirrored from src/styles.css (teal -> deep blue).
- * Hex values are required by WebGL materials; Tailwind tokens do not apply here.
- */
+/** Brand accents mirrored from src/styles.css; WebGL materials need literal hex. */
 const TEAL = "#22b8c4";
 const BLUE = "#2f56c9";
 const MINT = "#8ee8df";
 const NAVY = "#16233f";
-
-type Country = {
-  name: string;
-  code: string;
-  radius: number;
-  tiltX: number;
-  tiltZ: number;
-  speed: number;
-  color: string;
-};
-
-const COUNTRIES: Country[] = [
-  { name: "Lithuania", code: "LT", radius: 2.05, tiltX: 0.42, tiltZ: -0.18, speed: 0.22, color: TEAL },
-  { name: "Latvia", code: "LV", radius: 2.55, tiltX: -0.28, tiltZ: 0.32, speed: -0.16, color: BLUE },
-  { name: "Estonia", code: "EE", radius: 3.05, tiltX: 0.12, tiltZ: 0.55, speed: 0.12, color: MINT },
-];
 
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
@@ -49,7 +31,7 @@ function Rig({ children }: { children: React.ReactNode }) {
     pointerY: 0,
   });
 
-  const bind = useMemo(() => {
+  useMemo(() => {
     const el = gl.domElement;
     const s = state.current;
 
@@ -96,6 +78,7 @@ function Rig({ children }: { children: React.ReactNode }) {
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     el.addEventListener("pointerleave", onLeave);
+
     return () => {
       el.style.cursor = "";
       el.style.touchAction = "";
@@ -109,7 +92,6 @@ function Rig({ children }: { children: React.ReactNode }) {
   useFrame((_, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
     const s = state.current;
-    void bind;
 
     if (!s.dragging) {
       // inertia after release, then settle back into a slow idle spin
@@ -156,7 +138,7 @@ function Capsule() {
             clearcoat={1}
             clearcoatRoughness={0.06}
             attenuationColor={TEAL}
-            attenuationDistance={2.4}
+            attenuationDistance={2.2}
             color="#e6fbfb"
           />
         </mesh>
@@ -164,27 +146,27 @@ function Capsule() {
         {/* sealed glowing cross */}
         <group ref={cross}>
           <mesh>
-            <boxGeometry args={[0.16, 0.62, 0.16]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={2.4} toneMapped={false} />
+            <boxGeometry args={[0.17, 0.66, 0.17]} />
+            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.2} toneMapped={false} />
           </mesh>
           <mesh>
-            <boxGeometry args={[0.62, 0.16, 0.16]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={2.4} toneMapped={false} />
+            <boxGeometry args={[0.66, 0.17, 0.17]} />
+            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.2} toneMapped={false} />
           </mesh>
         </group>
 
-        {/* liquid line hinting at the fill level */}
+        {/* fill line hinting at the liquid level */}
         <mesh rotation-z={0.5} position={[0.02, -0.18, 0]}>
-          <torusGeometry args={[0.58, 0.012, 8, 64]} />
-          <meshStandardMaterial color={MINT} emissive={MINT} emissiveIntensity={1.2} toneMapped={false} />
+          <torusGeometry args={[0.58, 0.014, 8, 64]} />
+          <meshStandardMaterial color={MINT} emissive={MINT} emissiveIntensity={1.6} toneMapped={false} />
         </mesh>
       </group>
     </Float>
   );
 }
 
-/** One tilted orbit ring carrying a country node + label. */
-function Orbit({ country }: { country: Country }) {
+/** One tilted orbit ring carrying a country node. */
+function Orbit({ country }: { country: Baltic }) {
   const spinner = useRef<THREE.Group>(null);
   const node = useRef<THREE.Mesh>(null);
 
@@ -192,7 +174,7 @@ function Orbit({ country }: { country: Country }) {
     const delta = Math.min(rawDelta, 0.05);
     if (spinner.current) spinner.current.rotation.y += delta * country.speed;
     if (node.current) {
-      const pulse = 1 + Math.sin(performance.now() * 0.0022 + country.radius) * 0.12;
+      const pulse = 1 + Math.sin(performance.now() * 0.0022 + country.radius) * 0.14;
       node.current.scale.setScalar(pulse);
     }
   });
@@ -200,39 +182,25 @@ function Orbit({ country }: { country: Country }) {
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
       <mesh rotation-x={Math.PI / 2}>
-        <torusGeometry args={[country.radius, 0.008, 6, 160]} />
-        <meshBasicMaterial color={country.color} transparent opacity={0.35} />
+        <torusGeometry args={[country.radius, 0.009, 6, 160]} />
+        <meshBasicMaterial color={country.color} transparent opacity={0.4} />
       </mesh>
 
       <group ref={spinner}>
         <group position={[country.radius, 0, 0]}>
           <mesh ref={node}>
-            <sphereGeometry args={[0.085, 24, 24]} />
+            <sphereGeometry args={[0.1, 24, 24]} />
             <meshStandardMaterial
               color={country.color}
               emissive={country.color}
-              emissiveIntensity={1.8}
+              emissiveIntensity={2}
               toneMapped={false}
             />
           </mesh>
           <mesh rotation-x={Math.PI / 2}>
-            <torusGeometry args={[0.17, 0.006, 6, 48]} />
-            <meshBasicMaterial color={country.color} transparent opacity={0.6} />
+            <torusGeometry args={[0.19, 0.007, 6, 48]} />
+            <meshBasicMaterial color={country.color} transparent opacity={0.65} />
           </mesh>
-          <Html center distanceFactor={7} position={[0, 0.42, 0]} style={{ pointerEvents: "none" }}>
-            <div className="flex items-center gap-2 rounded-full border border-white/60 bg-white/85 px-3 py-1.5 shadow-lg backdrop-blur-sm">
-              <span
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: country.color }}
-              />
-              <span className="font-display whitespace-nowrap text-[13px] font-bold tracking-wide text-[#16233f]">
-                {country.name}
-              </span>
-              <span className="font-display text-[11px] font-bold tracking-widest text-[#22b8c4]">
-                {country.code}
-              </span>
-            </div>
-          </Html>
         </group>
       </group>
     </group>
@@ -248,11 +216,9 @@ function Pulse() {
     const t = clock.getElapsedTime();
     const cycle = (mesh: THREE.Mesh | null, offset: number) => {
       if (!mesh) return;
-      const p = ((t * 0.34 + offset) % 1);
-      const scale = 0.7 + p * 3.4;
-      mesh.scale.setScalar(scale);
-      const mat = mesh.material as THREE.MeshBasicMaterial;
-      mat.opacity = (1 - p) * 0.4;
+      const p = (t * 0.34 + offset) % 1;
+      mesh.scale.setScalar(0.7 + p * 3.4);
+      (mesh.material as THREE.MeshBasicMaterial).opacity = (1 - p) * 0.4;
     };
     cycle(a.current, 0);
     cycle(b.current, 0.5);
@@ -283,7 +249,7 @@ function Dust() {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      arr[i * 3 + 1] = (r * Math.cos(phi)) * 0.6;
+      arr[i * 3 + 1] = r * Math.cos(phi) * 0.6;
       arr[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
     return arr;
@@ -308,13 +274,19 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.55} />
-      <directionalLight position={[5, 7, 6]} intensity={1.35} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} />
+      <directionalLight
+        position={[5, 7, 6]}
+        intensity={1.35}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+      />
       <pointLight position={[-3.5, 1.5, 2]} intensity={12} color={TEAL} />
       <pointLight position={[3.5, -1.5, -2]} intensity={9} color={BLUE} />
 
       <Rig>
         <Capsule />
-        {COUNTRIES.map((c) => (
+        {BALTICS.map((c) => (
           <Orbit key={c.code} country={c} />
         ))}
         <Pulse />
@@ -336,12 +308,7 @@ function Scene() {
 export function Hero3D() {
   return (
     <div className="aspect-square w-full">
-      <Canvas
-        dpr={[1, 2]}
-        camera={{ position: [0, 0.5, 7.4], fov: 40 }}
-        gl={{ antialias: true, alpha: true }}
-        shadows
-      >
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 7.4], fov: 40 }} gl={{ antialias: true, alpha: true }} shadows>
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
