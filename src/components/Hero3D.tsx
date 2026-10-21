@@ -146,14 +146,16 @@ function Capsule() {
         {/* sealed glowing cross */}
         <group ref={cross}>
           <mesh>
-            <boxGeometry args={[0.17, 0.66, 0.17]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.2} toneMapped={false} />
+            <boxGeometry args={[0.22, 0.86, 0.22]} />
+            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={4.5} toneMapped={false} />
           </mesh>
           <mesh>
-            <boxGeometry args={[0.66, 0.17, 0.17]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={3.2} toneMapped={false} />
+            <boxGeometry args={[0.86, 0.22, 0.22]} />
+            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={4.5} toneMapped={false} />
           </mesh>
+          <pointLight intensity={6} distance={3.2} color={TEAL} />
         </group>
+
 
         {/* fill line hinting at the liquid level */}
         <mesh rotation-z={0.5} position={[0.02, -0.18, 0]}>

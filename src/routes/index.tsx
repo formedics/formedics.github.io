@@ -185,7 +185,7 @@ function Hero() {
                 {ready ? <Hero3D /> : <div className="aspect-square w-full bg-muted" />}
               </Suspense>
             </div>
-            <div className="pointer-events-none absolute inset-x-0 bottom-6 flex flex-wrap items-center justify-center gap-2 px-6">
+            <div className="pointer-events-none absolute inset-x-0 top-6 flex flex-wrap items-center justify-center gap-2 px-6">
               {BALTICS.map((b) => (
                 <span key={b.code} className="flex items-center gap-2 rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm backdrop-blur-sm">
                   <span className="h-2 w-2 rounded-full" style={{ backgroundColor: b.color }} />
