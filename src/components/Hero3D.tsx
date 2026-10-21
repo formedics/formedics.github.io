@@ -355,7 +355,7 @@ function Dust() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.03} color={TEAL} transparent opacity={0.55} sizeAttenuation depthWrite={false} />
+      <pointsMaterial size={0.022} color={TEAL} transparent opacity={0.4} sizeAttenuation depthWrite={false} />
     </points>
   );
 }
@@ -398,7 +398,7 @@ function Scene() {
 export function Hero3D() {
   return (
     <div className="aspect-square w-full">
-      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 7.4], fov: 40 }} gl={{ antialias: true, alpha: true }} shadows>
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 9.2], fov: 30 }} gl={{ antialias: true, alpha: true }} shadows>
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
