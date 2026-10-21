@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import hero from "@/assets/hero.jpg";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+
+const Hero3D = lazy(() => import("@/components/Hero3D").then((m) => ({ default: m.Hero3D })));
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -131,6 +133,11 @@ function Header() {
 
 function Hero() {
   const ref = useRef(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const rot = useTransform(scrollYProgress, [0, 1], [0, 6]);
@@ -167,7 +174,16 @@ function Hero() {
         </div>
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
           <motion.div style={{ y, rotate: rot }} className="overflow-hidden rounded-[2.5rem] border shadow-2xl">
-            <img src={hero} alt="Medical devices supplied by Formedics" width={1600} height={1600} className="aspect-square w-full object-cover" />
+            <div
+              role="img"
+              aria-label="Animated 3D visual: a glass medical capsule with Lithuania, Latvia and Estonia orbiting around it"
+              className="aspect-square w-full"
+            >
+              <Suspense fallback={<div className="aspect-square w-full bg-muted" />}>
+                {ready ? <Hero3D /> : <div className="aspect-square w-full bg-muted" />}
+              </Suspense>
+            </div>
+
           </motion.div>
           <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute -bottom-6 -left-6 rounded-2xl border bg-card p-5 shadow-xl">
             <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
