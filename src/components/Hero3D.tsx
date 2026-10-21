@@ -135,6 +135,51 @@ function Rig({ children }: { children: React.ReactNode }) {
   return <group ref={group}>{children}</group>;
 }
 
+/** Fresnel rim: capsule edges catch light, so the shell reads as real glass. */
+function GlassRim() {
+  const uniforms = useMemo(
+    () => ({
+      uColor: { value: new THREE.Color(TEAL) },
+      uPower: { value: 2.6 },
+      uStrength: { value: 0.85 },
+    }),
+    [],
+  );
+
+  return (
+    <mesh scale={[1.012, 1.012, 1.012]}>
+      <capsuleGeometry args={[0.62, 1.15, 16, 64]} />
+      <shaderMaterial
+        transparent
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        uniforms={uniforms}
+        vertexShader={/* glsl */ `
+          varying vec3 vNormal;
+          varying vec3 vView;
+          void main() {
+            vec4 wp = modelMatrix * vec4(position, 1.0);
+            vNormal = normalize(mat3(modelMatrix) * normal);
+            vView = normalize(cameraPosition - wp.xyz);
+            gl_Position = projectionMatrix * viewMatrix * wp;
+          }
+        `}
+        fragmentShader={/* glsl */ `
+          uniform vec3 uColor;
+          uniform float uPower;
+          uniform float uStrength;
+          varying vec3 vNormal;
+          varying vec3 vView;
+          void main() {
+            float f = pow(1.0 - abs(dot(normalize(vNormal), normalize(vView))), uPower);
+            gl_FragColor = vec4(uColor, f * uStrength);
+          }
+        `}
+      />
+    </mesh>
+  );
+}
+
 /** Frosted capsule shell with a glowing medical cross sealed inside. */
 function Capsule() {
   const cross = useRef<THREE.Group>(null);
@@ -153,17 +198,19 @@ function Capsule() {
         <mesh castShadow>
           <capsuleGeometry args={[0.62, 1.15, 16, 64]} />
           <meshPhysicalMaterial
-            color="#c8f4f2"
+            color="#a9e9e6"
             transparent
-            opacity={0.34}
-            roughness={0.1}
-            metalness={0.05}
+            opacity={0.3}
+            roughness={0.08}
+            metalness={0.1}
             clearcoat={1}
-            clearcoatRoughness={0.08}
+            clearcoatRoughness={0.06}
             depthWrite={false}
-            envMapIntensity={1.5}
+            envMapIntensity={1.8}
           />
         </mesh>
+        <GlassRim />
+
 
         {/* sealed glowing cross, kept facing the viewer */}
         <Billboard>
@@ -191,11 +238,12 @@ function Capsule() {
           </group>
         </Billboard>
 
-        {/* fill line hinting at the liquid level */}
-        <mesh rotation-z={0.5} position={[0.02, -0.18, 0]}>
-          <torusGeometry args={[0.58, 0.014, 8, 64]} />
+        {/* fill line hinting at the liquid level, kept below the emblem */}
+        <mesh rotation-z={0.5} position={[0.02, -0.66, 0]}>
+          <torusGeometry args={[0.5, 0.012, 8, 64]} />
           <meshStandardMaterial color={MINT} emissive={MINT} emissiveIntensity={1.6} toneMapped={false} />
         </mesh>
+
       </group>
     </Float>
   );
