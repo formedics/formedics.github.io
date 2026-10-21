@@ -120,9 +120,11 @@ function Rig({ children }: { children: React.ReactNode }) {
 function Capsule() {
   const cross = useRef<THREE.Group>(null);
 
-  useFrame((_, rawDelta) => {
-    const delta = Math.min(rawDelta, 0.05);
-    if (cross.current) cross.current.rotation.y += delta * 0.5;
+  useFrame(({ clock }) => {
+    if (!cross.current) return;
+    // gentle breathing so the sealed emblem feels alive without ever turning edge-on
+    const s = 1 + Math.sin(clock.getElapsedTime() * 1.6) * 0.06;
+    cross.current.scale.setScalar(s);
   });
 
   return (
@@ -132,30 +134,31 @@ function Capsule() {
           <capsuleGeometry args={[0.62, 1.15, 12, 48]} />
           <meshPhysicalMaterial
             transmission={1}
-            thickness={1.4}
-            roughness={0.08}
-            ior={1.45}
+            thickness={0.45}
+            roughness={0.05}
+            ior={1.35}
             clearcoat={1}
             clearcoatRoughness={0.06}
             attenuationColor={TEAL}
-            attenuationDistance={2.2}
-            color="#e6fbfb"
+            attenuationDistance={6}
+            color="#eefdfd"
           />
         </mesh>
 
-        {/* sealed glowing cross */}
-        <group ref={cross}>
-          <mesh>
-            <boxGeometry args={[0.22, 0.86, 0.22]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={4.5} toneMapped={false} />
-          </mesh>
-          <mesh>
-            <boxGeometry args={[0.86, 0.22, 0.22]} />
-            <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={4.5} toneMapped={false} />
-          </mesh>
-          <pointLight intensity={6} distance={3.2} color={TEAL} />
-        </group>
-
+        {/* sealed glowing cross, kept facing the viewer */}
+        <Billboard>
+          <group ref={cross}>
+            <mesh>
+              <boxGeometry args={[0.26, 0.94, 0.26]} />
+              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={5} toneMapped={false} />
+            </mesh>
+            <mesh>
+              <boxGeometry args={[0.94, 0.26, 0.26]} />
+              <meshStandardMaterial color={TEAL} emissive={TEAL} emissiveIntensity={5} toneMapped={false} />
+            </mesh>
+            <pointLight intensity={8} distance={3.5} color={TEAL} />
+          </group>
+        </Billboard>
 
         {/* fill line hinting at the liquid level */}
         <mesh rotation-z={0.5} position={[0.02, -0.18, 0]}>
@@ -166,6 +169,7 @@ function Capsule() {
     </Float>
   );
 }
+
 
 /** One tilted orbit ring carrying a country node. */
 function Orbit({ country }: { country: Baltic }) {
