@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { ContactShadows, Environment, Float, Lightformer } from "@react-three/drei";
+import { Billboard, ContactShadows, Environment, Float, Lightformer } from "@react-three/drei";
 import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { BALTICS, type Baltic } from "@/lib/baltics";
