@@ -266,23 +266,27 @@ function Orbit({ country }: { country: Baltic }) {
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
       <mesh rotation-x={Math.PI / 2}>
-        <torusGeometry args={[country.radius, 0.012, 12, 220]} />
-        <meshBasicMaterial color={country.color} transparent opacity={0.45} depthWrite={false} />
+        <torusGeometry args={[country.radius, 0.022, 16, 256]} />
+        <meshBasicMaterial color={country.color} transparent opacity={0.5} depthWrite={false} />
       </mesh>
 
       <group ref={spinner}>
         <group position={[country.radius, 0, 0]}>
           <mesh ref={node}>
-            <sphereGeometry args={[0.1, 24, 24]} />
-            <meshStandardMaterial
+            <sphereGeometry args={[0.1, 32, 32]} />
+            <meshPhysicalMaterial
               color={country.color}
               emissive={country.color}
-              emissiveIntensity={2}
-              toneMapped={false}
+              emissiveIntensity={1.1}
+              roughness={0.12}
+              metalness={0.35}
+              clearcoat={1}
+              clearcoatRoughness={0.1}
+              envMapIntensity={1.6}
             />
           </mesh>
           <mesh rotation-x={Math.PI / 2}>
-            <torusGeometry args={[0.19, 0.009, 10, 64]} />
+            <torusGeometry args={[0.19, 0.014, 12, 96]} />
             <meshBasicMaterial color={country.color} transparent opacity={0.7} depthWrite={false} />
           </mesh>
         </group>
@@ -290,6 +294,7 @@ function Orbit({ country }: { country: Baltic }) {
     </group>
   );
 }
+
 
 /** Expanding scan rings, like a pulse on a monitor. */
 function Pulse() {
@@ -327,15 +332,16 @@ function Dust() {
   const points = useRef<THREE.Points>(null);
 
   const positions = useMemo(() => {
-    const arr = new Float32Array(260 * 3);
-    for (let i = 0; i < 260; i++) {
-      const r = 2.4 + Math.random() * 2.6;
+    const arr = new Float32Array(140 * 3);
+    for (let i = 0; i < 140; i++) {
+      const r = 2.6 + Math.random() * 2.4;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(2 * Math.random() - 1);
       arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       arr[i * 3 + 1] = r * Math.cos(phi) * 0.6;
       arr[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
+
     return arr;
   }, []);
 
