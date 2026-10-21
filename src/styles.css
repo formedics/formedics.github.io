@@ -27,6 +27,11 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
   --color-background: var(--background);
+  --color-navy: var(--navy);
+  --color-navy-foreground: var(--navy-foreground);
+  --color-teal: var(--teal);
+  --font-display: "Sora", sans-serif;
+  --font-sans: "Manrope", sans-serif;
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -62,15 +67,20 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --radius: 1rem;
+  --background: oklch(0.985 0.006 220);
+  --foreground: oklch(0.2 0.04 245);
+  --navy: oklch(0.2 0.05 250);
+  --navy-foreground: oklch(0.97 0.01 220);
+  --teal: oklch(0.68 0.13 200);
+  --gradient-brand: linear-gradient(120deg, oklch(0.68 0.13 200), oklch(0.5 0.14 245));
+  --shadow-glow: 0 20px 60px -20px color-mix(in oklab, var(--teal) 55%, transparent);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.5 0.14 245);
+  --primary-foreground: oklch(0.98 0.01 220);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
@@ -142,3 +152,10 @@
     color: var(--color-foreground);
   }
 }
+
+@utility text-gradient { background: var(--gradient-brand); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@utility bg-gradient-brand { background: var(--gradient-brand); }
+@utility shadow-glow { box-shadow: var(--shadow-glow); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@utility animate-marquee { animation: marquee 30s linear infinite; }
+html { scroll-behavior: smooth; }
