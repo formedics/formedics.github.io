@@ -14,6 +14,11 @@ import { Route as ContactsRouteImport } from './routes/contacts'
 import { Route as EuProjectsRouteImport } from './routes/eu-projects'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as SocialResponsibilityRouteImport } from './routes/social-responsibility'
+import { Route as LtIndexRouteImport } from './routes/lt/index'
+import { Route as LtContactsRouteImport } from './routes/lt/contacts'
+import { Route as LtEuProjectsRouteImport } from './routes/lt/eu-projects'
+import { Route as LtProductsRouteImport } from './routes/lt/products'
+import { Route as LtSocialResponsibilityRouteImport } from './routes/lt/social-responsibility'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +45,31 @@ const SocialResponsibilityRoute = SocialResponsibilityRouteImport.update({
   path: '/social-responsibility',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LtIndexRoute = LtIndexRouteImport.update({
+  id: '/lt/',
+  path: '/lt/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LtContactsRoute = LtContactsRouteImport.update({
+  id: '/lt/contacts',
+  path: '/lt/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LtEuProjectsRoute = LtEuProjectsRouteImport.update({
+  id: '/lt/eu-projects',
+  path: '/lt/eu-projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LtProductsRoute = LtProductsRouteImport.update({
+  id: '/lt/products',
+  path: '/lt/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LtSocialResponsibilityRoute = LtSocialResponsibilityRouteImport.update({
+  id: '/lt/social-responsibility',
+  path: '/lt/social-responsibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +77,11 @@ export interface FileRoutesByFullPath {
   '/eu-projects': typeof EuProjectsRoute
   '/products': typeof ProductsRoute
   '/social-responsibility': typeof SocialResponsibilityRoute
+  '/lt/contacts': typeof LtContactsRoute
+  '/lt/eu-projects': typeof LtEuProjectsRoute
+  '/lt/products': typeof LtProductsRoute
+  '/lt/social-responsibility': typeof LtSocialResponsibilityRoute
+  '/lt/': typeof LtIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +89,11 @@ export interface FileRoutesByTo {
   '/eu-projects': typeof EuProjectsRoute
   '/products': typeof ProductsRoute
   '/social-responsibility': typeof SocialResponsibilityRoute
+  '/lt/contacts': typeof LtContactsRoute
+  '/lt/eu-projects': typeof LtEuProjectsRoute
+  '/lt/products': typeof LtProductsRoute
+  '/lt/social-responsibility': typeof LtSocialResponsibilityRoute
+  '/lt': typeof LtIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,14 +102,37 @@ export interface FileRoutesById {
   '/eu-projects': typeof EuProjectsRoute
   '/products': typeof ProductsRoute
   '/social-responsibility': typeof SocialResponsibilityRoute
+  '/lt/contacts': typeof LtContactsRoute
+  '/lt/eu-projects': typeof LtEuProjectsRoute
+  '/lt/products': typeof LtProductsRoute
+  '/lt/social-responsibility': typeof LtSocialResponsibilityRoute
+  '/lt/': typeof LtIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/contacts' | '/eu-projects' | '/products' | '/social-responsibility'
+    | '/'
+    | '/contacts'
+    | '/eu-projects'
+    | '/products'
+    | '/social-responsibility'
+    | '/lt/contacts'
+    | '/lt/eu-projects'
+    | '/lt/products'
+    | '/lt/social-responsibility'
+    | '/lt/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/contacts' | '/eu-projects' | '/products' | '/social-responsibility'
+    | '/'
+    | '/contacts'
+    | '/eu-projects'
+    | '/products'
+    | '/social-responsibility'
+    | '/lt/contacts'
+    | '/lt/eu-projects'
+    | '/lt/products'
+    | '/lt/social-responsibility'
+    | '/lt'
   id:
     | '__root__'
     | '/'
@@ -77,6 +140,11 @@ export interface FileRouteTypes {
     | '/eu-projects'
     | '/products'
     | '/social-responsibility'
+    | '/lt/contacts'
+    | '/lt/eu-projects'
+    | '/lt/products'
+    | '/lt/social-responsibility'
+    | '/lt/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -85,6 +153,11 @@ export interface RootRouteChildren {
   EuProjectsRoute: typeof EuProjectsRoute
   ProductsRoute: typeof ProductsRoute
   SocialResponsibilityRoute: typeof SocialResponsibilityRoute
+  LtContactsRoute: typeof LtContactsRoute
+  LtEuProjectsRoute: typeof LtEuProjectsRoute
+  LtProductsRoute: typeof LtProductsRoute
+  LtSocialResponsibilityRoute: typeof LtSocialResponsibilityRoute
+  LtIndexRoute: typeof LtIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -124,6 +197,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SocialResponsibilityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lt/': {
+      id: '/lt/'
+      path: '/lt'
+      fullPath: '/lt/'
+      preLoaderRoute: typeof LtIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lt/contacts': {
+      id: '/lt/contacts'
+      path: '/lt/contacts'
+      fullPath: '/lt/contacts'
+      preLoaderRoute: typeof LtContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lt/eu-projects': {
+      id: '/lt/eu-projects'
+      path: '/lt/eu-projects'
+      fullPath: '/lt/eu-projects'
+      preLoaderRoute: typeof LtEuProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lt/products': {
+      id: '/lt/products'
+      path: '/lt/products'
+      fullPath: '/lt/products'
+      preLoaderRoute: typeof LtProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lt/social-responsibility': {
+      id: '/lt/social-responsibility'
+      path: '/lt/social-responsibility'
+      fullPath: '/lt/social-responsibility'
+      preLoaderRoute: typeof LtSocialResponsibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -133,6 +241,11 @@ const rootRouteChildren: RootRouteChildren = {
   EuProjectsRoute: EuProjectsRoute,
   ProductsRoute: ProductsRoute,
   SocialResponsibilityRoute: SocialResponsibilityRoute,
+  LtContactsRoute: LtContactsRoute,
+  LtEuProjectsRoute: LtEuProjectsRoute,
+  LtProductsRoute: LtProductsRoute,
+  LtSocialResponsibilityRoute: LtSocialResponsibilityRoute,
+  LtIndexRoute: LtIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

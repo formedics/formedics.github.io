@@ -580,7 +580,7 @@ function Scene({ labels }: { labels: LabelRefs }) {
   );
 }
 
-export function Hero3D() {
+export function Hero3D({ labels: names }: { labels: Record<"LT" | "LV" | "EE", string> }) {
   const labels = useRef<(HTMLDivElement | null)[]>([]);
   return (
     <div className="relative aspect-square w-full">
@@ -603,7 +603,7 @@ export function Hero3D() {
             className="absolute left-0 top-0 flex items-center gap-2 whitespace-nowrap rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-lg backdrop-blur-sm will-change-transform"
           >
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: b.color, boxShadow: `0 0 10px ${b.color}` }} />
-            {b.name}
+            {names[b.code as "LT" | "LV" | "EE"]}
             <span className="text-[10px] font-bold tracking-widest text-primary">{b.code}</span>
           </div>
         ))}
