@@ -21,7 +21,6 @@ export type Dict = {
     years: string;
     yearsSub: string;
     iso: string;
-    drag: string;
     mapAria: string;
   };
   countries: { LT: string; LV: string; EE: string };

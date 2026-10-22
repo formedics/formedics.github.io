@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 /** Compact page intro used by every page except the homepage. */
 export function PageHero({ eyebrow, title, children }: { eyebrow: string; title: ReactNode; children?: ReactNode }) {
   return (
-    <section className="relative overflow-hidden pb-16 pt-32 lg:pt-40">
+    <section className="relative overflow-hidden pb-14 pt-32 lg:pt-36">
       <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(color-mix(in_oklab,var(--primary)_14%,transparent)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="bg-gradient-brand pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full opacity-15 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6">

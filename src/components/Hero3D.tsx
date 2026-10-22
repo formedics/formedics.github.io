@@ -32,15 +32,15 @@ const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(mi
 function useGlowTexture() {
   return useMemo(() => {
     const c = document.createElement("canvas");
-    c.width = c.height = 128;
+    c.width = c.height = 256;
     const ctx = c.getContext("2d");
     if (!ctx) return null;
-    const g = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    const g = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
     g.addColorStop(0, "rgba(255,255,255,0.9)");
     g.addColorStop(0.25, "rgba(255,255,255,0.35)");
     g.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = g;
-    ctx.fillRect(0, 0, 128, 128);
+    ctx.fillRect(0, 0, 256, 256);
     const t = new THREE.CanvasTexture(c);
     t.colorSpace = THREE.SRGBColorSpace;
     return t;
@@ -248,7 +248,7 @@ function Dots({ hover }: { hover: Hover }) {
 
   return (
     <instancedMesh ref={mesh} args={[undefined, undefined, count]} frustumCulled={false}>
-      <sphereGeometry args={[0.03, 10, 10]} />
+      <sphereGeometry args={[0.03, 12, 12]} />
       <meshStandardMaterial roughness={0.35} metalness={0.2} envMapIntensity={0.9} />
     </instancedMesh>
   );
@@ -370,7 +370,7 @@ function Capital({ name, country, hover, labels }: { name: CityName; country: nu
   const core = useRef<THREE.Mesh>(null);
   const anchor = useRef<THREE.Object3D>(null);
   const hot = useRef(false);
-  const scaleNow = useRef(1);
+  const hotShown = useRef<boolean | null>(null);
   const v = useMemo(() => new THREE.Vector3(), []);
 
   const pillarUniforms = useMemo(() => ({ uColor: { value: color }, uBoost: { value: 0 } }), [color]);
@@ -395,9 +395,13 @@ function Capital({ name, country, hover, labels }: { name: CityName; country: nu
       anchor.current.getWorldPosition(v).project(camera);
       const x = (v.x * 0.5 + 0.5) * size.width;
       const y = (-v.y * 0.5 + 0.5) * size.height;
-      scaleNow.current += ((hot.current ? 1.1 : 1) - scaleNow.current) * Math.min(1, rawDelta * 8);
-      el.style.transform = `translate(-50%, -50%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${scaleNow.current.toFixed(3)})`;
+      // whole-pixel offsets keep the pill text crisp (fractional transforms get resampled)
+      el.style.transform = `translate(${Math.round(x - el.offsetWidth / 2)}px, ${Math.round(y - el.offsetHeight / 2)}px)`;
       el.style.opacity = v.z < 1 ? "1" : "0";
+      if (hot.current !== hotShown.current) {
+        hotShown.current = hot.current;
+        el.dataset["hot"] = hot.current ? "1" : "0";
+      }
     }
   });
 
@@ -586,7 +590,7 @@ export function Hero3D({ labels: names }: { labels: Record<"LT" | "LV" | "EE", s
     <div className="relative aspect-square w-full">
       {/* absolutely positioned so the canvas's intrinsic size can never stretch the page column */}
       <div className="absolute inset-0 overflow-hidden">
-        <Canvas dpr={[1, 1.75]} camera={{ position: [0, 0.2, 9.2], fov: 30 }} gl={{ antialias: true, alpha: true }}>
+        <Canvas dpr={[1, 2]} camera={{ position: [0, 0.2, 9.2], fov: 30 }} gl={{ antialias: true, alpha: true }}>
           <Suspense fallback={null}>
             <Scene labels={labels} />
           </Suspense>
@@ -600,7 +604,7 @@ export function Hero3D({ labels: names }: { labels: Record<"LT" | "LV" | "EE", s
             ref={(el) => {
               labels.current[i] = el;
             }}
-            className="absolute left-0 top-0 flex items-center gap-2 whitespace-nowrap rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-lg backdrop-blur-sm will-change-transform"
+            className="absolute left-0 top-0 flex items-center gap-2 whitespace-nowrap rounded-full border bg-card/95 px-3 py-1.5 text-xs font-semibold text-foreground opacity-0 shadow-lg transition-[border-color,box-shadow] duration-300 data-[hot=1]:border-primary data-[hot=1]:shadow-glow"
           >
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: b.color, boxShadow: `0 0 10px ${b.color}` }} />
             {names[b.code as "LT" | "LV" | "EE"]}

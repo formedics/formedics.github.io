@@ -22,7 +22,6 @@ export const EN: Dict = {
     years: "20+ years",
     yearsSub: "trusted Baltic partner",
     iso: "ISO 9001 · 14001",
-    drag: "Drag to explore",
     mapAria: "Animated 3D map of Lithuania, Latvia and Estonia: glowing links carry light between Vilnius, Riga and Tallinn, and regional hubs connect to each capital",
   },
   countries: { LT: "Lithuania", LV: "Latvia", EE: "Estonia" },
