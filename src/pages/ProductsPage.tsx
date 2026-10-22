@@ -55,9 +55,9 @@ export function ProductsPage() {
 
       <section className="pb-32">
         <div className="mx-auto max-w-7xl px-6">
-          {/* category filter: one scrollable row, pinned under the header */}
+          {/* category filter, pinned under the header: a scrollable row on small screens, wrapped rows on desktop */}
           <div className="sticky top-[4.75rem] z-30 -mx-6 bg-background/85 px-6 py-4 backdrop-blur-xl">
-            <div ref={chips} className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]" aria-label={t.products.categoriesAria}>
+            <div ref={chips} className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] lg:flex-wrap lg:overflow-visible" aria-label={t.products.categoriesAria}>
               {filters.map((f) => {
                 const active = f === filter;
                 const n = f === "All" ? PARTNERS.length : counts.get(f) ?? 0;
@@ -115,7 +115,7 @@ export function ProductsPage() {
                         </li>
                       ))}
                     </ul>
-                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="mt-auto pt-5 text-sm font-semibold text-primary opacity-0 transition group-hover:opacity-100 focus:opacity-100">
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="mt-auto w-fit pt-5 text-sm font-semibold text-muted-foreground transition group-hover:text-primary hover:text-primary">
                       {t.products.visit}
                     </a>
                   </motion.li>

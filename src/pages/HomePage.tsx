@@ -95,7 +95,7 @@ function Hero() {
 
           {/* badges flow under the map on phones, float around it from sm up */}
           <div className="mt-2 flex flex-wrap items-center gap-3 sm:contents">
-            <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="relative rounded-2xl border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:absolute sm:-bottom-2 sm:-right-8 sm:p-5">
+            <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="relative rounded-2xl border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:absolute sm:-bottom-2 sm:-right-2 sm:p-5 2xl:-right-8">
               <div className="font-display text-3xl font-bold text-gradient">{t.hero.years}</div>
               <p className="text-sm text-muted-foreground">{t.hero.yearsSub}</p>
             </motion.div>
@@ -282,15 +282,15 @@ function Products() {
             {t.products.learnMore}
           </Link>
         </Reveal>
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:mt-16 lg:grid-cols-4">
           {PRODUCT_AREAS.map((area, i) => (
             <Reveal key={area.category} delay={i * 0.07} className="h-full">
               <motion.div whileHover={{ y: -8, rotate: -1 }} className="h-full">
-                <Link to={path("/products/")} search={{ category: area.category }} className="group flex h-full flex-col items-center justify-center gap-6 rounded-3xl border bg-card p-8 text-center transition-shadow hover:shadow-glow">
-                  <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-muted transition-transform duration-500 group-hover:scale-110">
+                <Link to={path("/products/")} search={{ category: area.category }} className="group flex h-full flex-col items-center justify-center gap-4 rounded-3xl border bg-card p-5 text-center transition-shadow hover:shadow-glow sm:gap-6 sm:p-8">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted transition-transform duration-500 group-hover:scale-110 sm:h-24 sm:w-24">
                     <img src={`${W}/${area.icon}`} alt="" loading="lazy" className="max-h-16 max-w-16" />
                   </div>
-                  <span className="font-display font-semibold">{t.products.categories[area.category]}</span>
+                  <span className="font-display text-sm font-semibold [overflow-wrap:anywhere] sm:text-base">{t.products.categories[area.category]}</span>
                 </Link>
               </motion.div>
             </Reveal>
@@ -350,7 +350,7 @@ function Nhif() {
                 </a>
               </div>
             </div>
-            <div className="bg-gradient-brand space-y-6 p-8 text-primary-foreground sm:p-10 md:p-14">
+            <div className="bg-gradient-brand space-y-6 p-8 text-primary-foreground sm:p-10 md:p-14 lg:flex lg:flex-col lg:items-start lg:justify-center">
               <h3 className="font-display text-2xl font-semibold">{n.consult}</h3>
               <p>
                 <b>{hq.company}</b>
