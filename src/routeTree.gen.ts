@@ -10,33 +10,81 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactsRouteImport } from './routes/contacts'
+import { Route as EuProjectsRouteImport } from './routes/eu-projects'
+import { Route as ProductsRouteImport } from './routes/products'
+import { Route as SocialResponsibilityRouteImport } from './routes/social-responsibility'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactsRoute = ContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EuProjectsRoute = EuProjectsRouteImport.update({
+  id: '/eu-projects',
+  path: '/eu-projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsRoute = ProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SocialResponsibilityRoute = SocialResponsibilityRouteImport.update({
+  id: '/social-responsibility',
+  path: '/social-responsibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/eu-projects': typeof EuProjectsRoute
+  '/products': typeof ProductsRoute
+  '/social-responsibility': typeof SocialResponsibilityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/eu-projects': typeof EuProjectsRoute
+  '/products': typeof ProductsRoute
+  '/social-responsibility': typeof SocialResponsibilityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contacts': typeof ContactsRoute
+  '/eu-projects': typeof EuProjectsRoute
+  '/products': typeof ProductsRoute
+  '/social-responsibility': typeof SocialResponsibilityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/contacts' | '/eu-projects' | '/products' | '/social-responsibility'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    '/' | '/contacts' | '/eu-projects' | '/products' | '/social-responsibility'
+  id:
+    | '__root__'
+    | '/'
+    | '/contacts'
+    | '/eu-projects'
+    | '/products'
+    | '/social-responsibility'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactsRoute: typeof ContactsRoute
+  EuProjectsRoute: typeof EuProjectsRoute
+  ProductsRoute: typeof ProductsRoute
+  SocialResponsibilityRoute: typeof SocialResponsibilityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +96,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contacts': {
+      id: '/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof ContactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eu-projects': {
+      id: '/eu-projects'
+      path: '/eu-projects'
+      fullPath: '/eu-projects'
+      preLoaderRoute: typeof EuProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products': {
+      id: '/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/social-responsibility': {
+      id: '/social-responsibility'
+      path: '/social-responsibility'
+      fullPath: '/social-responsibility'
+      preLoaderRoute: typeof SocialResponsibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactsRoute: ContactsRoute,
+  EuProjectsRoute: EuProjectsRoute,
+  ProductsRoute: ProductsRoute,
+  SocialResponsibilityRoute: SocialResponsibilityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
