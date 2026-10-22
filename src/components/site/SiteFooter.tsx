@@ -22,7 +22,7 @@ export function SiteFooter() {
       <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-16">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.1fr_1fr_1fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
-            <img src={`${W}/2016/04/formedics-logotipas-baltas-227px.png`} alt="Formedics" className="h-9 w-auto" />
+            <img src="/formedics-logo-white.svg" alt="Formedics" width={735} height={100} className="h-9 w-auto" />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-navy-foreground/70">{t.footer.tagline}</p>
             <a
               href="https://www.sgs.com/certifiedclients"

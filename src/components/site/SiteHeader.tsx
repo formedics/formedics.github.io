@@ -2,7 +2,6 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, type SitePath } from "@/lib/i18n";
-import { W } from "@/lib/site";
 
 /**
  * Fixed site header shared by every page, in both languages.
@@ -87,7 +86,7 @@ export function SiteHeader() {
       <motion.div style={{ scaleX: progress }} className="bg-gradient-brand absolute bottom-0 left-0 h-0.5 w-full origin-left" />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link to={path("/")} className="shrink-0 rounded-lg px-2 py-1" aria-label="Formedics">
-          <img src={`${W}/2016/04/Formedics-logo-227-px.png`} alt="Formedics" className="h-8 w-auto sm:h-9" />
+          <img src="/formedics-logo.svg" alt="Formedics" width={735} height={100} className="h-8 w-auto sm:h-9" />
         </Link>
 
         <nav className="hidden items-center gap-0.5 xl:flex" aria-label="Main">
