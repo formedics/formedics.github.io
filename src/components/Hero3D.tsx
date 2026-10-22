@@ -292,36 +292,6 @@ function Orbit({ country }: { country: Baltic }) {
 }
 
 
-/** Expanding scan rings, like a pulse on a monitor. */
-function Pulse() {
-  const a = useRef<THREE.Mesh>(null);
-  const b = useRef<THREE.Mesh>(null);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    const cycle = (mesh: THREE.Mesh | null, offset: number) => {
-      if (!mesh) return;
-      const p = (t * 0.34 + offset) % 1;
-      mesh.scale.setScalar(0.5 + p * 1.6);
-      (mesh.material as THREE.MeshBasicMaterial).opacity = (1 - p) * 0.4;
-    };
-    cycle(a.current, 0);
-    cycle(b.current, 0.5);
-  });
-
-  return (
-    <group rotation-x={-1.15} position-y={-1.25}>
-      <mesh ref={a}>
-        <ringGeometry args={[0.98, 1, 96]} />
-        <meshBasicMaterial color={TEAL} transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
-      </mesh>
-      <mesh ref={b}>
-        <ringGeometry args={[0.98, 1, 96]} />
-        <meshBasicMaterial color={BLUE} transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
-      </mesh>
-    </group>
-  );
-}
 
 /** Drifting dust for depth. */
 function Dust() {
