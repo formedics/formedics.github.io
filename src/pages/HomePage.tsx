@@ -1,13 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { GraduationCap, Handshake, Leaf, ShieldCheck, TrendingUp, Users } from "lucide-react";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type SyntheticEvent } from "react";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { Reveal } from "@/components/site/Reveal";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { useLocale } from "@/lib/i18n";
-import { NHIF_PDFS, OFFICES, PRODUCT_AREAS, W } from "@/lib/site";
+import { NHIF_PDFS, OFFICES, PARTNERS, PRODUCT_AREAS, W } from "@/lib/site";
 
 const Hero3D = lazy(() => import("@/components/Hero3D").then((m) => ({ default: m.Hero3D })));
 
@@ -47,15 +47,15 @@ function Hero() {
   const rot = useTransform(scrollYProgress, [0, 1], [0, 3]);
 
   return (
-    <section id="top" ref={ref} className="relative flex overflow-hidden bg-background pt-28 pb-16 sm:pt-32 sm:pb-20 lg:min-h-svh lg:items-center lg:pt-28 lg:pb-16">
+    <section id="top" ref={ref} className="relative flex overflow-hidden bg-background pt-28 pb-16 sm:pt-32 sm:pb-20 lg:min-h-svh lg:flex-col lg:pt-28 lg:pb-16 lg:[@media(min-height:860px)]:pb-10">
       <div className="pointer-events-none absolute inset-0 [background-image:radial-gradient(color-mix(in_oklab,var(--primary)_14%,transparent)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,black,transparent)]" />
       <div className="bg-gradient-brand pointer-events-none absolute -right-40 -top-40 h-[36rem] w-[36rem] rounded-full opacity-15 blur-3xl" />
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 sm:gap-14 lg:grid-cols-[1.1fr_1fr] 2xl:max-w-[88rem]">
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 px-6 sm:gap-14 lg:my-auto lg:grid-cols-[1.1fr_1fr] 2xl:max-w-[88rem]">
         <div className="min-w-0">
           <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border bg-card px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-primary sm:text-xs sm:tracking-[0.2em]">
             <span className="h-2 w-2 animate-pulse rounded-full bg-teal" /> {t.hero.eyebrow}
           </motion.p>
-          <h1 className="font-display text-[2.75rem] font-bold leading-[1.05] text-foreground sm:text-5xl md:text-7xl lg:text-[clamp(3rem,min(5.4vw,8vh),4.5rem)] 2xl:text-[clamp(4.5rem,min(5vw,10vh),6rem)]">
+          <h1 className="font-display text-[2.75rem] font-bold leading-[1.05] text-foreground sm:text-5xl md:text-7xl lg:text-[clamp(3rem,min(6vw,8vh),4.5rem)] 2xl:text-[clamp(4.5rem,min(5vw,10vh),6rem)]">
             {t.hero.words.map((w, i) => (
               <span key={i} className="inline-block overflow-hidden pb-2 align-bottom">
                 <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ delay: 0.3 + i * 0.12, duration: 0.9, ease: [0.22, 1, 0.36, 1] }} className={`mr-3 inline-block sm:mr-4 ${i >= t.hero.highlightFrom ? "text-gradient" : ""}`}>
@@ -102,6 +102,26 @@ function Hero() {
             <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="relative rounded-2xl border bg-card/90 px-4 py-2.5 shadow-xl backdrop-blur-sm sm:absolute sm:-top-6 sm:left-2 sm:px-5 sm:py-3">
               <p className="text-xs font-bold uppercase tracking-widest text-primary">{t.hero.iso}</p>
             </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* on tall desktop viewports the content would float between empty bands: a strip of the partners' logos
+          anchors the foot of the first screen (it stays hidden where the hero already fills the height) */}
+      <div className="relative mx-auto mt-12 hidden w-full max-w-7xl px-6 lg:[@media(min-height:860px)]:block 2xl:max-w-[88rem]">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.3, duration: 0.8 }} className="border-t pt-6">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">{t.hero.partners}</p>
+          <div className="mt-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            {/* each set carries its own trailing gap so the -50% marquee loop joins seamlessly */}
+            <div className="animate-marquee flex w-max items-center [animation-duration:80s] hover:[animation-play-state:paused] motion-reduce:[animation:none]">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flex shrink-0 items-center gap-5 pr-5" aria-hidden={copy === 1 || undefined}>
+                  {PARTNERS.map((p) => (
+                    <img key={p.name} src={`${W}/${p.logo}`} alt={copy === 0 ? p.name : ""} loading="lazy" decoding="async" onError={hideBrokenImage} className="h-14 w-auto rounded-xl object-contain opacity-80 ring-1 ring-foreground/5 transition hover:opacity-100" />
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
@@ -155,6 +175,11 @@ function About() {
     </section>
   );
 }
+
+/** The partner thumbnails come from formedics.lt; a tile that fails to load is dropped rather than shown broken. */
+const hideBrokenImage = (e: SyntheticEvent<HTMLImageElement>) => {
+  e.currentTarget.style.display = "none";
+};
 
 const COMMITMENT_ICONS = [ShieldCheck, Users, GraduationCap, Handshake, Leaf, TrendingUp];
 /** On large screens the commitments are shown as stacks of two (six items make three stacks). */

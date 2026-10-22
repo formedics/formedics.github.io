@@ -22,6 +22,8 @@ export type Dict = {
     yearsSub: string;
     iso: string;
     mapAria: string;
+    /** label of the partner-logo strip at the foot of the hero */
+    partners: string;
   };
   countries: { LT: string; LV: string; EE: string };
   about: {

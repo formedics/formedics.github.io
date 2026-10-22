@@ -24,6 +24,7 @@ export const LT: Dict = {
     yearsSub: "patikimas partneris Baltijos šalyse",
     iso: "ISO 9001 · 14001",
     mapAria: "Animuotas 3D Lietuvos, Latvijos ir Estijos žemėlapis: švytinčios jungtys tarp Vilniaus, Rygos ir Talino, regioniniai centrai sujungti su sostinėmis",
+    partners: "Mūsų partneriai",
   },
   countries: { LT: "Lietuva", LV: "Latvija", EE: "Estija" },
   about: {
