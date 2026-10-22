@@ -238,11 +238,6 @@ function Capsule() {
           </group>
         </Billboard>
 
-        {/* fill line hinting at the liquid level, kept below the emblem */}
-        <mesh rotation-z={0.5} position={[0.02, -0.66, 0]}>
-          <torusGeometry args={[0.5, 0.012, 8, 64]} />
-          <meshStandardMaterial color={MINT} emissive={MINT} emissiveIntensity={1.6} toneMapped={false} />
-        </mesh>
 
       </group>
     </Float>
@@ -307,7 +302,7 @@ function Pulse() {
     const cycle = (mesh: THREE.Mesh | null, offset: number) => {
       if (!mesh) return;
       const p = (t * 0.34 + offset) % 1;
-      mesh.scale.setScalar(0.7 + p * 3.4);
+      mesh.scale.setScalar(0.5 + p * 1.6);
       (mesh.material as THREE.MeshBasicMaterial).opacity = (1 - p) * 0.4;
     };
     cycle(a.current, 0);
@@ -399,7 +394,7 @@ function Scene() {
 export function Hero3D() {
   return (
     <div className="aspect-square w-full">
-      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 9.2], fov: 30 }} gl={{ antialias: true, alpha: true }} shadows>
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 10], fov: 30 }} gl={{ antialias: true, alpha: true }} shadows>
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
