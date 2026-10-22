@@ -261,24 +261,22 @@ function Orbit({ country }: { country: Baltic }) {
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
       <mesh>
-        <torusGeometry args={[country.radius, 0.035, 20, 256]} />
+        <torusGeometry args={[country.radius, 0.07, 24, 256]} />
         <meshStandardMaterial
           color={country.color}
           emissive={country.color}
-          emissiveIntensity={0.55}
-          roughness={0.3}
-          metalness={0.4}
-          transparent
-          opacity={0.9}
-          depthWrite={false}
+          emissiveIntensity={0.25}
+          roughness={0.2}
+          metalness={0.65}
         />
       </mesh>
+
 
 
       <group ref={spinner}>
         <group position={[country.radius, 0, 0]}>
           <mesh ref={node}>
-            <sphereGeometry args={[0.1, 32, 32]} />
+            <sphereGeometry args={[0.12, 32, 32]} />
             <meshPhysicalMaterial
               color={country.color}
               emissive={country.color}
@@ -291,7 +289,7 @@ function Orbit({ country }: { country: Baltic }) {
             />
           </mesh>
           <mesh>
-            <torusGeometry args={[0.19, 0.018, 12, 96]} />
+            <torusGeometry args={[0.22, 0.025, 12, 96]} />
             <meshBasicMaterial color={country.color} transparent opacity={0.7} depthWrite={false} />
           </mesh>
         </group>
