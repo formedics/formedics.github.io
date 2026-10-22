@@ -163,7 +163,7 @@ function Policy() {
   const { t } = useLocale();
   const p = t.policy;
   return (
-    <section id="policy" className="relative scroll-mt-20 overflow-hidden bg-navy py-20 text-navy-foreground lg:py-24">
+    <section id="policy" className="relative scroll-mt-20 overflow-hidden bg-navy py-16 text-navy-foreground lg:py-20">
       <div className="bg-gradient-brand pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full opacity-20 blur-3xl" />
       <div className="bg-gradient-brand pointer-events-none absolute -right-48 bottom-0 h-[28rem] w-[28rem] rounded-full opacity-10 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6">
@@ -171,55 +171,61 @@ function Policy() {
         <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-end lg:gap-16">
           <Reveal>
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-teal">{p.eyebrow}</p>
-            <h2 className="font-display text-4xl font-bold md:text-5xl xl:text-6xl">{p.title}</h2>
+            <h2 className="font-display text-4xl font-bold md:text-5xl">{p.title}</h2>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="text-lg leading-relaxed text-navy-foreground/80 md:text-xl">{p.intro}</p>
-            <p className="font-display mt-5 text-lg font-semibold text-teal md:text-xl">{p.commit}</p>
+            <p className="text-lg leading-relaxed text-navy-foreground/80">{p.intro}</p>
+            <p className="font-display mt-4 text-lg font-semibold text-teal">{p.commit}</p>
           </Reveal>
         </div>
 
         {/* six commitments */}
-        <ol className="mt-10 grid gap-4 md:grid-cols-2 lg:mt-12 lg:grid-cols-3">
-          {p.items.map((item, i) => {
-            const Icon = COMMITMENT_ICONS[i] ?? ShieldCheck;
-            return (
-              <li key={i} className="h-full">
-                <Reveal delay={i * 0.06} className="h-full">
-                  <motion.div whileHover={{ y: -6 }} className="group relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl border border-navy-foreground/10 bg-navy-foreground/5 p-6 backdrop-blur transition hover:border-teal/50 hover:bg-navy-foreground/10">
-                    <div className="flex items-center justify-between">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal/15 text-teal transition group-hover:bg-teal/25">
+        {/* two stacks that read top to bottom (01-03, then 04-06): each item is only as tall as its text */}
+        <div role="list" className="mt-8 grid gap-3 lg:mt-10 lg:grid-cols-2 lg:gap-4">
+          {[p.items.slice(0, Math.ceil(p.items.length / 2)), p.items.slice(Math.ceil(p.items.length / 2))].map((column, c) => (
+            <div key={c} className="flex flex-col gap-3 lg:gap-4">
+              {column.map((item, j) => {
+                const i = c * Math.ceil(p.items.length / 2) + j;
+                const Icon = COMMITMENT_ICONS[i] ?? ShieldCheck;
+                return (
+                  <Reveal key={i} delay={i * 0.05}>
+                    <motion.div role="listitem" whileHover={{ y: -4 }} className="group relative flex gap-4 overflow-hidden rounded-2xl border border-navy-foreground/10 bg-navy-foreground/5 p-5 backdrop-blur transition hover:border-teal/50 hover:bg-navy-foreground/10 sm:gap-5 sm:p-6">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal/15 text-teal transition group-hover:bg-teal/25">
                         <Icon className="h-5 w-5" aria-hidden />
                       </span>
-                      <span className="font-display text-xl font-bold text-gradient">{String(i + 1).padStart(2, "0")}</span>
-                    </div>
-                    <p className="leading-relaxed text-navy-foreground/85">{item}</p>
-                  </motion.div>
-                </Reveal>
-              </li>
-            );
-          })}
-        </ol>
+                      <div className="min-w-0">
+                        <span className="font-display text-xs font-bold tracking-[0.25em] text-gradient" aria-hidden>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <p className="mt-1.5 leading-relaxed text-navy-foreground/85">{item}</p>
+                      </div>
+                    </motion.div>
+                  </Reveal>
+                );
+              })}
+            </div>
+          ))}
+        </div>
 
         {/* the CEO's statement: the three closing paragraphs as his own signed words */}
-        <Reveal className="mt-8 lg:mt-10">
+        <Reveal className="mt-6 lg:mt-8">
           <figure className="relative overflow-hidden rounded-3xl border border-navy-foreground/10 bg-navy-foreground/5 backdrop-blur">
             <div className="bg-gradient-brand pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-15 blur-3xl" />
-            <div className="relative grid gap-10 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:gap-16 lg:p-12">
+            <div className="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:gap-12 lg:p-10">
               <blockquote className="relative">
-                <span aria-hidden className="font-display pointer-events-none absolute -left-3 -top-12 text-8xl leading-none text-teal/25 select-none sm:-left-5 sm:-top-14 sm:text-9xl">
+                <span aria-hidden className="font-display pointer-events-none absolute -left-2 -top-9 text-7xl leading-none text-teal/25 select-none sm:-left-4 sm:-top-11 sm:text-8xl">
                   “
                 </span>
-                <div className="relative space-y-5 text-lg leading-relaxed text-navy-foreground/85 md:text-xl">
+                <div className="relative space-y-4 text-base leading-relaxed text-navy-foreground/85 md:text-lg">
                   {p.closing.map((text, i) => (
                     <p key={i}>{text}</p>
                   ))}
                 </div>
               </blockquote>
 
-              <figcaption className="flex flex-col justify-end gap-8 border-t border-navy-foreground/10 pt-8 lg:w-64 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+              <figcaption className="flex flex-col justify-end gap-6 border-t border-navy-foreground/10 pt-6 lg:w-60 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
                 <div>
-                  <p className="font-display text-3xl font-bold leading-tight text-navy-foreground sm:text-[2rem]">{p.ceo}</p>
+                  <p className="font-display text-2xl font-bold leading-tight text-navy-foreground sm:text-3xl">{p.ceo}</p>
                   <span className="bg-gradient-brand mt-3 block h-0.5 w-16 rounded-full" aria-hidden />
                   <p className="mt-3 text-sm font-bold uppercase tracking-[0.3em] text-teal">{p.ceoLabel}</p>
                   <p className="mt-1 text-sm text-navy-foreground/60">UAB „Formedics“</p>
