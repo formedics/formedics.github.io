@@ -286,7 +286,7 @@ function Orbit({ country }: { country: Baltic }) {
               envMapIntensity={1.6}
             />
           </mesh>
-          <mesh rotation-x={Math.PI / 2}>
+          <mesh>
             <torusGeometry args={[0.19, 0.014, 12, 96]} />
             <meshBasicMaterial color={country.color} transparent opacity={0.7} depthWrite={false} />
           </mesh>
@@ -315,7 +315,7 @@ function Pulse() {
   });
 
   return (
-    <group rotation-x={-Math.PI / 2} position-y={-1.35}>
+    <group rotation-x={-1.15} position-y={-1.25}>
       <mesh ref={a}>
         <ringGeometry args={[0.98, 1, 96]} />
         <meshBasicMaterial color={TEAL} transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
