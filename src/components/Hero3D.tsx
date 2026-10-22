@@ -205,10 +205,10 @@ function Capsule() {
             metalness={0.1}
             clearcoat={1}
             clearcoatRoughness={0.06}
-            depthWrite={false}
             envMapIntensity={1.8}
           />
         </mesh>
+
         <GlassRim />
 
 
@@ -394,7 +394,7 @@ function Scene() {
 export function Hero3D() {
   return (
     <div className="aspect-square w-full">
-      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.5, 10], fov: 30 }} gl={{ antialias: true, alpha: true }} shadows>
+      <Canvas dpr={[1, 2]} camera={{ position: [0, 0.4, 10.5], fov: 30 }} gl={{ antialias: true, alpha: true }} shadows>
         <Suspense fallback={null}>
           <Scene />
         </Suspense>
