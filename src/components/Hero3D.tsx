@@ -375,7 +375,6 @@ function Scene() {
         {BALTICS.map((c) => (
           <Orbit key={c.code} country={c} />
         ))}
-        <Pulse />
         <Dust />
       </Rig>
 
