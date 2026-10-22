@@ -68,7 +68,7 @@ function Hero() {
             {t.hero.subtitle}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="mt-10 flex flex-wrap gap-4">
-            <Link to={path("/products")} className="bg-gradient-brand shadow-glow rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">
+            <Link to={path("/products/")} className="bg-gradient-brand shadow-glow rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">
               {t.hero.ctaProducts}
             </Link>
             <a href="#about" className="rounded-full border bg-card px-8 py-4 font-semibold text-foreground transition hover:border-primary hover:text-primary">
@@ -77,7 +77,7 @@ function Hero() {
           </motion.div>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="mt-12 flex flex-wrap gap-2">
             {PRODUCT_AREAS.map((area) => (
-              <Link key={area.category} to={path("/products")} search={{ category: area.category }} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:bg-teal/15 hover:text-primary">
+              <Link key={area.category} to={path("/products/")} search={{ category: area.category }} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground transition hover:bg-teal/15 hover:text-primary">
                 {t.products.categories[area.category]}
               </Link>
             ))}
@@ -247,7 +247,7 @@ function Products() {
       <div className="mx-auto max-w-7xl px-6">
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-display text-4xl font-bold md:text-6xl">{t.products.title}</h2>
-          <Link to={path("/products")} className="font-semibold text-primary underline-offset-4 hover:underline">
+          <Link to={path("/products/")} className="font-semibold text-primary underline-offset-4 hover:underline">
             {t.products.learnMore}
           </Link>
         </Reveal>
@@ -255,7 +255,7 @@ function Products() {
           {PRODUCT_AREAS.map((area, i) => (
             <Reveal key={area.category} delay={i * 0.07} className="h-full">
               <motion.div whileHover={{ y: -8, rotate: -1 }} className="h-full">
-                <Link to={path("/products")} search={{ category: area.category }} className="group flex h-full flex-col items-center justify-center gap-6 rounded-3xl border bg-card p-8 text-center transition-shadow hover:shadow-glow">
+                <Link to={path("/products/")} search={{ category: area.category }} className="group flex h-full flex-col items-center justify-center gap-6 rounded-3xl border bg-card p-8 text-center transition-shadow hover:shadow-glow">
                   <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-muted transition-transform duration-500 group-hover:scale-110">
                     <img src={`${W}/${area.icon}`} alt="" loading="lazy" className="max-h-16 max-w-16" />
                   </div>
@@ -265,7 +265,7 @@ function Products() {
             </Reveal>
           ))}
           <Reveal delay={0.5} className="h-full">
-            <Link to={path("/products")} className="bg-gradient-brand flex h-full min-h-48 items-center justify-center rounded-3xl p-8 font-display text-xl font-semibold text-primary-foreground transition hover:scale-[1.02]">
+            <Link to={path("/products/")} className="bg-gradient-brand flex h-full min-h-48 items-center justify-center rounded-3xl p-8 font-display text-xl font-semibold text-primary-foreground transition hover:scale-[1.02]">
               {t.products.learnMore}
             </Link>
           </Reveal>
@@ -335,7 +335,7 @@ function Nhif() {
               <p className="opacity-90">
                 <b>{n.hours}</b> {n.hoursValue}
               </p>
-              <Link to={path("/contacts")} className="inline-block rounded-full border border-primary-foreground/40 px-5 py-2 text-sm font-semibold transition hover:bg-white/10">
+              <Link to={path("/contacts/")} className="inline-block rounded-full border border-primary-foreground/40 px-5 py-2 text-sm font-semibold transition hover:bg-white/10">
                 {n.allOffices}
               </Link>
             </div>

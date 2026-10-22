@@ -4,7 +4,7 @@ import { LT } from "./content/lt";
 import type { Dict } from "./content/types";
 
 /** Absolute origin for canonical / hreflang links (the client's domain; override per deployment). */
-export const SITE_ORIGIN = (import.meta.env["VITE_SITE_ORIGIN"] as string | undefined)?.replace(/\/+$/, "") ?? "https://formedics.lt";
+export const SITE_ORIGIN = ((import.meta.env["VITE_SITE_ORIGIN"] as string | undefined) || "https://formedics.lt").replace(/\/+$/, "");
 
 /**
  * Two languages, mirrored URLs: English at the root, Lithuanian under /lt.
@@ -13,8 +13,9 @@ export const SITE_ORIGIN = (import.meta.env["VITE_SITE_ORIGIN"] as string | unde
  */
 export type Locale = "en" | "lt";
 
-export type SitePath = "/" | "/products" | "/eu-projects" | "/social-responsibility" | "/contacts";
-export type RoutePath = SitePath | "/lt" | "/lt/products" | "/lt/eu-projects" | "/lt/social-responsibility" | "/lt/contacts";
+// Paths end with a slash: the static build writes <route>/index.html and the router uses trailingSlash: "always".
+export type SitePath = "/" | "/products/" | "/eu-projects/" | "/social-responsibility/" | "/contacts/";
+export type RoutePath = SitePath | "/lt/" | "/lt/products/" | "/lt/eu-projects/" | "/lt/social-responsibility/" | "/lt/contacts/";
 
 export const DICT: Record<Locale, Dict> = { en: EN, lt: LT };
 
@@ -25,13 +26,13 @@ export function localeFromPath(pathname: string): Locale {
 /** Path of the same page without the language prefix. */
 export function stripLocale(pathname: string): SitePath {
   const p = pathname === "/lt" ? "/" : pathname.startsWith("/lt/") ? pathname.slice(3) : pathname;
-  const clean = p.replace(/\/+$/, "") || "/";
-  return (["/", "/products", "/eu-projects", "/social-responsibility", "/contacts"].includes(clean) ? clean : "/") as SitePath;
+  const clean = p.replace(/\/+$/, "") + "/";
+  return (["/", "/products/", "/eu-projects/", "/social-responsibility/", "/contacts/"].includes(clean) ? clean : "/") as SitePath;
 }
 
 export function localized(locale: Locale, path: SitePath): RoutePath {
   if (locale === "en") return path;
-  return path === "/" ? "/lt" : (`/lt${path}` as RoutePath);
+  return `/lt${path}` as RoutePath;
 }
 
 export function useLocale() {

@@ -10,10 +10,10 @@ export function SiteFooter() {
     { label: t.nav.home, to: "/" },
     { label: t.nav.about, to: "/", hash: "about" },
     { label: t.nav.policy, to: "/", hash: "policy" },
-    { label: t.nav.products, to: "/products" },
-    { label: t.nav.eu, to: "/eu-projects" },
-    { label: t.nav.social, to: "/social-responsibility" },
-    { label: t.nav.contacts, to: "/contacts" },
+    { label: t.nav.products, to: "/products/" },
+    { label: t.nav.eu, to: "/eu-projects/" },
+    { label: t.nav.social, to: "/social-responsibility/" },
+    { label: t.nav.contacts, to: "/contacts/" },
   ];
 
   return (

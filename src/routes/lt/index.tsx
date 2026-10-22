@@ -14,9 +14,9 @@ export const Route = createFileRoute("/lt/")({
     ],
     links: [
       { rel: "canonical", href: `${SITE_ORIGIN}/lt/` },
-      { rel: "alternate", hrefLang: "lt", href: `${SITE_ORIGIN}/lt` },
-      { rel: "alternate", hrefLang: "en", href: `${SITE_ORIGIN}` },
-      { rel: "alternate", hrefLang: "x-default", href: `${SITE_ORIGIN}` },
+      { rel: "alternate", hrefLang: "lt", href: `${SITE_ORIGIN}/lt/` },
+      { rel: "alternate", hrefLang: "en", href: `${SITE_ORIGIN}/` },
+      { rel: "alternate", hrefLang: "x-default", href: `${SITE_ORIGIN}/` },
     ],
   }),
   component: HomePage,

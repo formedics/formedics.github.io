@@ -1,26 +1,34 @@
 # formedics-website
 
-formedics.lt - my client runs this website i need you to clone it and make it better, more scrolling effects, better visuals and better UI UX however keep structure text etc., but scrollling effects menus more live and animated website make do your best clone but with lots of improvements
+Revamped website for [Formedics](https://formedics.lt), a medical-device distributor
+serving Lithuania, Latvia and Estonia. English at `/`, Lithuanian under `/lt`.
 
-This project was built with [Lovable](https://lovable.dev).
+**Live site**: https://formedics.github.io
 
-**Live app**: https://formedics-website.lovable.app
+## Hosting
 
-## Build with Lovable
+The site is fully static. Every push to `main` runs
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which prerenders
+all routes into `dist/client` and publishes that folder to GitHub Pages.
+No server runs in production.
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e5152435-161f-487a-8b04-e647ebd4de06).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+To serve it from the company domain later, add a `CNAME` file to `public/`
+with the domain and point the domain's DNS at GitHub Pages; the canonical
+URLs and sitemap follow the deployment origin automatically.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Requires Node.js 22.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm ci
+npm run dev          # prints the local URL
+npm run build        # static output in dist/client
+npm run preview      # serve the built site locally
+npx tsc --noEmit -p tsconfig.json
+npm run lint
+npm test
 ```
+
+Stack: TanStack Start / Router (prerendered), React 19, Tailwind v4,
+framer-motion, react-three-fiber for the hero map.

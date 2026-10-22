@@ -8,6 +8,8 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     context: { queryClient },
+    // GitHub Pages serves each prerendered route from <route>/index.html, so canonical URLs end with a slash
+    trailingSlash: "always",
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   });

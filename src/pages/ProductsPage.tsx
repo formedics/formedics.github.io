@@ -1,6 +1,6 @@
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useSyncExternalStore } from "react";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { PageHero } from "@/components/site/PageHero";
 import { Reveal } from "@/components/site/Reveal";
@@ -18,12 +18,18 @@ export const validateProductsSearch = (search: Record<string, unknown>): Product
 
 type Filter = "All" | Category;
 
+// The static HTML is prerendered without a category, so while that HTML is being hydrated the
+// filter must stay "All"; once hydrated (and on every client-side navigation) the URL filter applies.
+const subscribeNoop = () => () => {};
+const useHydrated = () => useSyncExternalStore(subscribeNoop, () => true, () => false);
+
 export function ProductsPage() {
   const { t, path } = useLocale();
-  const { category } = useSearch({ strict: false }) as ProductsSearch;
+  const rawSearch = useSearch({ strict: false }) as Record<string, unknown>;
+  const category = useHydrated() ? validateProductsSearch(rawSearch).category : undefined;
   const navigate = useNavigate();
   const filter: Filter = category ?? "All";
-  const setFilter = (f: Filter) => void navigate({ to: path("/products"), search: f === "All" ? {} : { category: f }, replace: true, resetScroll: false });
+  const setFilter = (f: Filter) => void navigate({ to: path("/products/"), search: f === "All" ? {} : { category: f }, replace: true, resetScroll: false });
   const label = (f: Filter) => (f === "All" ? t.products.all : t.products.categories[f]);
 
   // keep the active chip visible in the scrollable row
@@ -125,7 +131,7 @@ export function ProductsPage() {
               {t.products.statementBefore} <span className="text-gradient">{t.products.statementHighlight}</span> {t.products.statementAfter}
             </h2>
             <p className="mt-8 text-lg leading-relaxed text-muted-foreground">{t.products.statementText}</p>
-            <Link to={path("/contacts")} className="bg-gradient-brand shadow-glow mt-10 inline-block rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">
+            <Link to={path("/contacts/")} className="bg-gradient-brand shadow-glow mt-10 inline-block rounded-full px-8 py-4 font-semibold text-primary-foreground transition hover:scale-105">
               {t.products.contact}
             </Link>
           </Reveal>
