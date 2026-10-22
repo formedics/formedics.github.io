@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
 import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
-import { BALTICS } from "@/lib/baltics";
 
 
 const Hero3D = lazy(() => import("@/components/Hero3D").then((m) => ({ default: m.Hero3D })));
@@ -142,7 +141,7 @@ function Hero() {
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const rot = useTransform(scrollYProgress, [0, 1], [0, 6]);
+  const rot = useTransform(scrollYProgress, [0, 1], [0, 3]);
   const words = "Dedication towards your success!".split(" ");
   const chips = ["Cardiology", "Radiology", "Endoscopy", "Orthopedics", "Urology", "Surgery"];
   return (
@@ -174,35 +173,34 @@ function Hero() {
             {chips.map((c) => <span key={c} className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">{c}</span>)}
           </motion.div>
         </div>
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
-          <motion.div style={{ y, rotate: rot }} className="bg-gradient-to-br from-card to-muted/60 relative overflow-hidden rounded-[2.5rem] border shadow-2xl">
+        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative min-w-0">
+          <motion.div style={{ y, rotate: rot }} className="relative">
+            {/* unboxed: a soft halo instead of a card, so the map floats on the page */}
+            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[85%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-70 blur-3xl [background:radial-gradient(circle,color-mix(in_oklab,var(--teal)_30%,transparent),color-mix(in_oklab,var(--primary)_12%,transparent)_45%,transparent_72%)]" />
             <div
               role="img"
-              aria-label="Animated 3D visual: a glass medical capsule with Lithuania, Latvia and Estonia orbiting around it"
-              className="aspect-square w-full"
+              aria-label="Animated 3D map of Lithuania, Latvia and Estonia: glowing links carry light between Vilnius, Riga and Tallinn, and regional hubs connect to each capital"
+              className="relative aspect-square w-full"
             >
-              <Suspense fallback={<div className="aspect-square w-full bg-muted" />}>
-                {ready ? <Hero3D /> : <div className="aspect-square w-full bg-muted" />}
+              <Suspense fallback={<div className="aspect-square w-full" />}>
+                {ready ? <Hero3D /> : <div className="aspect-square w-full" />}
               </Suspense>
             </div>
-            <div className="pointer-events-none absolute inset-x-0 top-6 flex flex-wrap items-center justify-center gap-2 px-6">
-              {BALTICS.map((b) => (
-                <span key={b.code} className="flex items-center gap-2 rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm backdrop-blur-sm">
-                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: b.color }} />
-                  {b.name}
-                  <span className="text-[10px] font-bold tracking-widest text-primary">{b.code}</span>
-                </span>
-              ))}
-            </div>
+            <p className="pointer-events-none absolute -bottom-3 left-1/2 hidden -translate-x-1/2 text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/70 sm:block">
+              Drag to explore
+            </p>
           </motion.div>
 
-          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute bottom-3 left-3 rounded-2xl border bg-card p-4 shadow-xl sm:-bottom-6 sm:-left-6 sm:p-5">
-            <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
-            <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
-          </motion.div>
-          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute bottom-3 right-3 rounded-2xl border bg-card px-4 py-2.5 shadow-xl sm:bottom-auto sm:right-0 sm:top-0 sm:-mt-16 sm:px-5 sm:py-3">
-            <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
-          </motion.div>
+          {/* badges flow under the map on phones, float around it from sm up */}
+          <div className="mt-2 flex flex-wrap items-center gap-3 sm:contents">
+            <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="relative rounded-2xl border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:absolute sm:-bottom-2 sm:-right-8 sm:p-5">
+              <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
+              <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
+            </motion.div>
+            <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="relative rounded-2xl border bg-card/90 px-4 py-2.5 shadow-xl backdrop-blur-sm sm:absolute sm:-top-6 sm:left-2 sm:px-5 sm:py-3">
+              <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
