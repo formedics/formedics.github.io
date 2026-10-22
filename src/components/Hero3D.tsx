@@ -276,17 +276,18 @@ function Orbit({ country }: { country: Baltic }) {
       <group ref={spinner}>
         <group position={[country.radius, 0, 0]}>
           <mesh ref={node}>
-            <sphereGeometry args={[0.12, 32, 32]} />
+            <sphereGeometry args={[0.12, 48, 48]} />
             <meshPhysicalMaterial
               color={country.color}
               emissive={country.color}
-              emissiveIntensity={1.1}
-              roughness={0.12}
-              metalness={0.35}
+              emissiveIntensity={0.6}
+              roughness={0.1}
+              metalness={0.5}
               clearcoat={1}
               clearcoatRoughness={0.1}
               envMapIntensity={1.6}
             />
+
           </mesh>
           <mesh>
             <torusGeometry args={[0.22, 0.025, 12, 96]} />

@@ -16,9 +16,10 @@ export type Baltic = {
 };
 
 export const BALTICS: Baltic[] = [
-  { name: "Lithuania", code: "LT", color: "#22b8c4", radius: 1.45, tiltX: 0.6, tiltZ: -0.25, speed: 0.22 },
-  { name: "Latvia", code: "LV", color: "#2f56c9", radius: 1.75, tiltX: -0.5, tiltZ: 0.45, speed: -0.16 },
-  { name: "Estonia", code: "EE", color: "#5fd3c8", radius: 2.05, tiltX: 1.0, tiltZ: 0.18, speed: 0.12 },
+  { name: "Lithuania", code: "LT", color: "#22b8c4", radius: 0.95, tiltX: 1.15, tiltZ: -0.3, speed: 0.22 },
+  { name: "Latvia", code: "LV", color: "#2f56c9", radius: 1.15, tiltX: -0.9, tiltZ: 0.5, speed: -0.16 },
+  { name: "Estonia", code: "EE", color: "#5fd3c8", radius: 1.35, tiltX: 0.55, tiltZ: 0.25, speed: 0.12 },
+
 
 
 ];
