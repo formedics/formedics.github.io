@@ -200,7 +200,7 @@ function Hero() {
             <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
             <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
           </motion.div>
-          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute bottom-3 right-3 rounded-2xl border bg-card px-4 py-2.5 shadow-xl sm:bottom-auto sm:right-0 sm:top-8 sm:-right-4 sm:px-5 sm:py-3">
+          <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute bottom-3 right-3 rounded-2xl border bg-card px-4 py-2.5 shadow-xl sm:bottom-auto sm:right-0 sm:top-0 sm:-mt-16 sm:px-5 sm:py-3">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
           </motion.div>
         </motion.div>
