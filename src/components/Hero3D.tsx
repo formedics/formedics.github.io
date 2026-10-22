@@ -256,7 +256,7 @@ function Orbit({ country }: { country: Baltic }) {
 
   useFrame((_, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
-    if (spinner.current) spinner.current.rotation.y += delta * country.speed;
+    if (spinner.current) spinner.current.rotation.z += delta * country.speed;
     if (node.current) {
       const pulse = 1 + Math.sin(performance.now() * 0.0022 + country.radius) * 0.14;
       node.current.scale.setScalar(pulse);
@@ -265,8 +265,9 @@ function Orbit({ country }: { country: Baltic }) {
 
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
-      <mesh rotation-x={Math.PI / 2}>
+      <mesh>
         <torusGeometry args={[country.radius, 0.022, 16, 256]} />
+
         <meshBasicMaterial color={country.color} transparent opacity={0.5} depthWrite={false} />
       </mesh>
 
