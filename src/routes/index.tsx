@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import hero from "@/assets/hero.jpg";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { BALTICS } from "@/lib/baltics";
+
+
+const Hero3D = lazy(() => import("@/components/Hero3D").then((m) => ({ default: m.Hero3D })));
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -131,6 +135,11 @@ function Header() {
 
 function Hero() {
   const ref = useRef(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const rot = useTransform(scrollYProgress, [0, 1], [0, 6]);
@@ -166,14 +175,32 @@ function Hero() {
           </motion.div>
         </div>
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }} className="relative">
-          <motion.div style={{ y, rotate: rot }} className="overflow-hidden rounded-[2.5rem] border shadow-2xl">
-            <img src={hero} alt="Medical devices supplied by Formedics" width={1600} height={1600} className="aspect-square w-full object-cover" />
+          <motion.div style={{ y, rotate: rot }} className="bg-gradient-to-br from-card to-muted/60 relative overflow-hidden rounded-[2.5rem] border shadow-2xl">
+            <div
+              role="img"
+              aria-label="Animated 3D visual: a glass medical capsule with Lithuania, Latvia and Estonia orbiting around it"
+              className="aspect-square w-full"
+            >
+              <Suspense fallback={<div className="aspect-square w-full bg-muted" />}>
+                {ready ? <Hero3D /> : <div className="aspect-square w-full bg-muted" />}
+              </Suspense>
+            </div>
+            <div className="pointer-events-none absolute inset-x-0 top-6 flex flex-wrap items-center justify-center gap-2 px-6">
+              {BALTICS.map((b) => (
+                <span key={b.code} className="flex items-center gap-2 rounded-full border bg-card/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm backdrop-blur-sm">
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: b.color }} />
+                  {b.name}
+                  <span className="text-[10px] font-bold tracking-widest text-primary">{b.code}</span>
+                </span>
+              ))}
+            </div>
           </motion.div>
-          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute -bottom-6 -left-6 rounded-2xl border bg-card p-5 shadow-xl">
+
+          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute bottom-3 left-3 rounded-2xl border bg-card p-4 shadow-xl sm:-bottom-6 sm:-left-6 sm:p-5">
             <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
             <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
           </motion.div>
-          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute -right-4 top-8 rounded-2xl border bg-card px-5 py-3 shadow-xl">
+          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute bottom-3 right-3 rounded-2xl border bg-card px-4 py-2.5 shadow-xl sm:bottom-auto sm:right-0 sm:top-8 sm:-right-4 sm:px-5 sm:py-3">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
           </motion.div>
         </motion.div>
