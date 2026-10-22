@@ -196,11 +196,11 @@ function Hero() {
             </div>
           </motion.div>
 
-          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute -bottom-6 -left-6 rounded-2xl border bg-card p-5 shadow-xl">
+          <motion.div animate={{ y: [0, -12, 0] }} transition={{ repeat: Infinity, duration: 4 }} className="absolute bottom-3 left-3 rounded-2xl border bg-card p-4 shadow-xl sm:-bottom-6 sm:-left-6 sm:p-5">
             <div className="font-display text-3xl font-bold text-gradient">20+ years</div>
             <p className="text-sm text-muted-foreground">trusted Baltic partner</p>
           </motion.div>
-          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute -right-4 top-8 rounded-2xl border bg-card px-5 py-3 shadow-xl">
+          <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 5 }} className="absolute bottom-3 right-3 rounded-2xl border bg-card px-4 py-2.5 shadow-xl sm:bottom-auto sm:right-0 sm:top-8 sm:-right-4 sm:px-5 sm:py-3">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">ISO 9001 · 14001</p>
           </motion.div>
         </motion.div>
