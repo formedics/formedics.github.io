@@ -157,13 +157,15 @@ function About() {
 }
 
 const COMMITMENT_ICONS = [ShieldCheck, Users, GraduationCap, Handshake, Leaf, TrendingUp];
+/** On large screens the commitments are shown as stacks of two (six items make three stacks). */
+const COMMITMENT_STACK_SIZE = 2;
 
 /** Company policy: intro, six commitments as a card grid, then the closing paragraphs as the CEO's signed statement. */
 function Policy() {
   const { t } = useLocale();
   const p = t.policy;
   return (
-    <section id="policy" className="relative scroll-mt-20 overflow-hidden bg-navy py-16 text-navy-foreground lg:py-20">
+    <section id="policy" className="relative scroll-mt-20 overflow-hidden bg-navy py-12 text-navy-foreground lg:py-14">
       <div className="bg-gradient-brand pointer-events-none absolute -left-40 top-20 h-96 w-96 rounded-full opacity-20 blur-3xl" />
       <div className="bg-gradient-brand pointer-events-none absolute -right-48 bottom-0 h-[28rem] w-[28rem] rounded-full opacity-10 blur-3xl" />
       <div className="relative mx-auto max-w-7xl px-6">
@@ -180,16 +182,17 @@ function Policy() {
         </div>
 
         {/* six commitments */}
-        {/* two stacks that read top to bottom (01-03, then 04-06): each item is only as tall as its text */}
-        <div role="list" className="mt-8 grid gap-3 lg:mt-10 lg:grid-cols-2 lg:gap-4">
-          {[p.items.slice(0, Math.ceil(p.items.length / 2)), p.items.slice(Math.ceil(p.items.length / 2))].map((column, c) => (
+        {/* three short stacks that read top to bottom (01-02, 03-04, 05-06), so the whole section fits one desktop screen;
+            the two cards of a stack share its height, so stacks line up without a card stretching to the tallest text on the row */}
+        <div role="list" className="mt-8 grid gap-3 lg:grid-cols-3 lg:gap-4">
+          {Array.from({ length: Math.ceil(p.items.length / COMMITMENT_STACK_SIZE) }, (_, c) => p.items.slice(c * COMMITMENT_STACK_SIZE, (c + 1) * COMMITMENT_STACK_SIZE)).map((stack, c) => (
             <div key={c} className="flex flex-col gap-3 lg:gap-4">
-              {column.map((item, j) => {
-                const i = c * Math.ceil(p.items.length / 2) + j;
+              {stack.map((item, j) => {
+                const i = c * COMMITMENT_STACK_SIZE + j;
                 const Icon = COMMITMENT_ICONS[i] ?? ShieldCheck;
                 return (
-                  <Reveal key={i} delay={i * 0.05}>
-                    <motion.div role="listitem" whileHover={{ y: -4 }} className="group relative flex gap-4 overflow-hidden rounded-2xl border border-navy-foreground/10 bg-navy-foreground/5 p-5 backdrop-blur transition hover:border-teal/50 hover:bg-navy-foreground/10 sm:gap-5 sm:p-6">
+                  <Reveal key={i} delay={i * 0.05} className="flex flex-1">
+                    <motion.div role="listitem" whileHover={{ y: -4 }} className="group relative flex w-full gap-4 overflow-hidden rounded-2xl border border-navy-foreground/10 bg-navy-foreground/5 p-5 backdrop-blur transition hover:border-teal/50 hover:bg-navy-foreground/10 lg:flex-col xl:flex-row">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-teal/15 text-teal transition group-hover:bg-teal/25">
                         <Icon className="h-5 w-5" aria-hidden />
                       </span>
@@ -197,7 +200,7 @@ function Policy() {
                         <span className="font-display text-xs font-bold tracking-[0.25em] text-gradient" aria-hidden>
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        <p className="mt-1.5 leading-relaxed text-navy-foreground/85">{item}</p>
+                        <p className="mt-1.5 leading-relaxed text-navy-foreground/85 lg:text-[0.9375rem]">{item}</p>
                       </div>
                     </motion.div>
                   </Reveal>
@@ -208,24 +211,24 @@ function Policy() {
         </div>
 
         {/* the CEO's statement: the three closing paragraphs as his own signed words */}
-        <Reveal className="mt-6 lg:mt-8">
+        <Reveal className="mt-4 lg:mt-5">
           <figure className="relative overflow-hidden rounded-3xl border border-navy-foreground/10 bg-navy-foreground/5 backdrop-blur">
             <div className="bg-gradient-brand pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-15 blur-3xl" />
-            <div className="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:gap-12 lg:p-10">
+            <div className="relative grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:gap-10">
               <blockquote className="relative">
                 <span aria-hidden className="font-display pointer-events-none absolute -left-2 -top-9 text-7xl leading-none text-teal/25 select-none sm:-left-4 sm:-top-11 sm:text-8xl">
                   “
                 </span>
-                <div className="relative space-y-4 text-base leading-relaxed text-navy-foreground/85 md:text-lg">
+                <div className="relative space-y-3 text-base leading-relaxed text-navy-foreground/85">
                   {p.closing.map((text, i) => (
                     <p key={i}>{text}</p>
                   ))}
                 </div>
               </blockquote>
 
-              <figcaption className="flex flex-col justify-end gap-6 border-t border-navy-foreground/10 pt-6 lg:w-60 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
+              <figcaption className="flex flex-col justify-end gap-5 border-t border-navy-foreground/10 pt-6 lg:w-60 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0">
                 <div>
-                  <p className="font-display text-2xl font-bold leading-tight text-navy-foreground sm:text-3xl">{p.ceo}</p>
+                  <p className="font-display text-2xl font-bold leading-tight text-navy-foreground">{p.ceo}</p>
                   <span className="bg-gradient-brand mt-3 block h-0.5 w-16 rounded-full" aria-hidden />
                   <p className="mt-3 text-sm font-bold uppercase tracking-[0.3em] text-teal">{p.ceoLabel}</p>
                   <p className="mt-1 text-sm text-navy-foreground/60">UAB „Formedics“</p>
