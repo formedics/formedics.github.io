@@ -147,7 +147,7 @@ function GlassRim() {
   );
 
   return (
-    <mesh scale={[1.012, 1.012, 1.012]}>
+    <mesh scale={[1.012, 1.012, 1.012]} renderOrder={1}>
       <capsuleGeometry args={[0.62, 1.15, 16, 64]} />
       <shaderMaterial
         transparent
@@ -195,7 +195,7 @@ function Capsule() {
     <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.7}>
       <group rotation-z={-0.5}>
         {/* shell: translucent so the cross stays readable, clearcoat for the wet glass highlight */}
-        <mesh castShadow>
+        <mesh castShadow renderOrder={-1}>
           <capsuleGeometry args={[0.62, 1.15, 16, 64]} />
           <meshPhysicalMaterial
             color="#a9e9e6"
@@ -261,10 +261,19 @@ function Orbit({ country }: { country: Baltic }) {
   return (
     <group rotation={[country.tiltX, 0, country.tiltZ]}>
       <mesh>
-        <torusGeometry args={[country.radius, 0.022, 16, 256]} />
-
-        <meshBasicMaterial color={country.color} transparent opacity={0.5} depthWrite={false} />
+        <torusGeometry args={[country.radius, 0.035, 20, 256]} />
+        <meshStandardMaterial
+          color={country.color}
+          emissive={country.color}
+          emissiveIntensity={0.55}
+          roughness={0.3}
+          metalness={0.4}
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+        />
       </mesh>
+
 
       <group ref={spinner}>
         <group position={[country.radius, 0, 0]}>
@@ -282,7 +291,7 @@ function Orbit({ country }: { country: Baltic }) {
             />
           </mesh>
           <mesh>
-            <torusGeometry args={[0.19, 0.014, 12, 96]} />
+            <torusGeometry args={[0.19, 0.018, 12, 96]} />
             <meshBasicMaterial color={country.color} transparent opacity={0.7} depthWrite={false} />
           </mesh>
         </group>
