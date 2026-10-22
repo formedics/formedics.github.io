@@ -60,7 +60,6 @@ export const EN: Dict = {
       "The Company’s management regularly reviews, analyses and updates the objectives and policies of the management system to ensure that it remains relevant and appropriate.",
       "The company’s employees are familiar with the management system policy. It is available to all interested parties.",
     ],
-    assuranceLabels: ["Internal and external audits", "Regular management review", "Available to all interested parties"],
     certified: "Certified to ISO 9001:2015 and ISO 14001:2015",
     ceoLabel: "CEO",
     ceo: "Eimantas Baltušis",

@@ -41,8 +41,6 @@ export type Dict = {
     commit: string;
     items: string[];
     closing: string[];
-    /** short labels for the three closing paragraphs, derived from their own wording */
-    assuranceLabels: string[];
     certified: string;
     ceoLabel: string;
     ceo: string;

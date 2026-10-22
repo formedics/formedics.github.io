@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ClipboardCheck, Eye, GraduationCap, Handshake, Leaf, RefreshCw, ShieldCheck, TrendingUp, Users } from "lucide-react";
+import { GraduationCap, Handshake, Leaf, ShieldCheck, TrendingUp, Users } from "lucide-react";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { CookieConsent } from "@/components/site/CookieConsent";
 import { Reveal } from "@/components/site/Reveal";
@@ -160,9 +160,8 @@ function About() {
 }
 
 const COMMITMENT_ICONS = [ShieldCheck, Users, GraduationCap, Handshake, Leaf, TrendingUp];
-const ASSURANCE_ICONS = [ClipboardCheck, RefreshCw, Eye];
 
-/** Company policy: intro, six commitments as a card grid, then the assurance block with the CEO sign-off. */
+/** Company policy: intro, six commitments as a card grid, then the closing paragraphs as the CEO's signed statement. */
 function Policy() {
   const { t } = useLocale();
   const p = t.policy;
@@ -205,43 +204,37 @@ function Policy() {
           })}
         </ol>
 
-        {/* assurance + sign-off */}
-        <div className="mt-8 grid gap-5 lg:mt-10 lg:grid-cols-[1.5fr_1fr]">
-          <Reveal className="h-full">
-            <div className="h-full rounded-3xl border border-navy-foreground/10 bg-navy-foreground/5 p-7 backdrop-blur sm:p-9">
-              <ul className="divide-y divide-navy-foreground/10">
-                {p.closing.map((text, i) => {
-                  const Icon = ASSURANCE_ICONS[i] ?? ClipboardCheck;
-                  return (
-                    <li key={i} className="flex gap-5 py-6 first:pt-0 last:pb-0">
-                      <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-brand text-primary-foreground shadow-glow">
-                        <Icon className="h-5 w-5" aria-hidden />
-                      </span>
-                      <div>
-                        <h3 className="font-display text-lg font-semibold text-navy-foreground">{p.assuranceLabels[i]}</h3>
-                        <p className="mt-2 leading-relaxed text-navy-foreground/75">{text}</p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </Reveal>
+        {/* the CEO's statement: the three closing paragraphs as his own signed words */}
+        <Reveal className="mt-8 lg:mt-10">
+          <figure className="relative overflow-hidden rounded-3xl border border-navy-foreground/10 bg-navy-foreground/5 backdrop-blur">
+            <div className="bg-gradient-brand pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full opacity-15 blur-3xl" />
+            <div className="relative grid gap-10 p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:gap-16 lg:p-12">
+              <blockquote className="relative">
+                <span aria-hidden className="font-display pointer-events-none absolute -left-3 -top-12 text-8xl leading-none text-teal/25 select-none sm:-left-5 sm:-top-14 sm:text-9xl">
+                  “
+                </span>
+                <div className="relative space-y-5 text-lg leading-relaxed text-navy-foreground/85 md:text-xl">
+                  {p.closing.map((text, i) => (
+                    <p key={i}>{text}</p>
+                  ))}
+                </div>
+              </blockquote>
 
-          <Reveal delay={0.1} className="h-full">
-            <div className="flex h-full flex-col justify-between gap-10 rounded-3xl bg-gradient-brand p-7 text-primary-foreground shadow-glow sm:p-9">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary-foreground/75">{p.ceoLabel}</p>
-                <p className="font-display mt-3 text-3xl font-bold leading-tight sm:text-4xl">{p.ceo}</p>
-                <span className="mt-6 block h-px w-24 bg-primary-foreground/40" aria-hidden />
-              </div>
-              <a href="https://www.sgs.com/certifiedclients" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 rounded-2xl bg-white/10 p-4 transition hover:bg-white/20">
-                <img src={`${W}/2018/01/SGS_logo_90_1.png`} alt="SGS" className="h-12 w-auto rounded-md bg-white p-1" loading="lazy" />
-                <span className="text-sm font-semibold leading-snug">{p.certified}</span>
-              </a>
+              <figcaption className="flex flex-col justify-end gap-8 border-t border-navy-foreground/10 pt-8 lg:w-64 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+                <div>
+                  <p className="font-display text-3xl font-bold leading-tight text-navy-foreground sm:text-[2rem]">{p.ceo}</p>
+                  <span className="bg-gradient-brand mt-3 block h-0.5 w-16 rounded-full" aria-hidden />
+                  <p className="mt-3 text-sm font-bold uppercase tracking-[0.3em] text-teal">{p.ceoLabel}</p>
+                  <p className="mt-1 text-sm text-navy-foreground/60">UAB „Formedics“</p>
+                </div>
+                <a href="https://www.sgs.com/certifiedclients" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 rounded-2xl border border-navy-foreground/10 bg-navy-foreground/5 p-3 transition hover:border-teal/50">
+                  <img src={`${W}/2018/01/SGS_logo_90_1.png`} alt="SGS" className="h-10 w-auto rounded-md bg-white p-1" loading="lazy" />
+                  <span className="text-xs font-semibold leading-snug text-navy-foreground/80">{p.certified}</span>
+                </a>
+              </figcaption>
             </div>
-          </Reveal>
-        </div>
+          </figure>
+        </Reveal>
       </div>
     </section>
   );

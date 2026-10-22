@@ -61,7 +61,6 @@ export const LT: Dict = {
       "Bendrovės vadovybė reguliariai peržiūri, analizuoja bei atnaujina tikslus ir vadybos sistemos politiką, kad ji nuolat išliktų aktuali ir tinkama.",
       "Bendrovės darbuotojai yra susipažinę su vadybos sistemos politika. Ji prieinama visoms suinteresuotosioms šalims.",
     ],
-    assuranceLabels: ["Vidaus ir išorės auditai", "Reguliari vadovybės peržiūra", "Prieinama visoms suinteresuotosioms šalims"],
     certified: "Sertifikuota pagal ISO 9001:2015 ir ISO 14001:2015",
     ceoLabel: "Direktorius",
     ceo: "Eimantas Baltušis",
